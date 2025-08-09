@@ -34,6 +34,44 @@ let theme = createTheme({
 		radius,
 		shadows,
 	},
+	components: {
+		MuiButton: {
+			styleOverrides: {
+				root: ({ theme }) => ({
+					padding: `${theme.spacing(12)} ${theme.spacing(24)}`,
+					borderRadius: theme.brand.radius.small,
+				}),
+			},
+			variants: [
+				{
+					props: { variant: "contained", color: "brandPrimary" },
+					style: ({ theme }) => ({
+						backgroundColor: theme.palette.brand.primary[500],
+						color: theme.palette.brand.neutral[100],
+						"&:hover": {
+							backgroundColor: theme.palette.brand.primary[600],
+						},
+					}),
+				},
+			],
+		},
+
+		MuiContainer: {
+			styleOverrides: {
+				root: ({ theme }) => ({
+					[theme.breakpoints.up("xl")]: {
+						paddingLeft: theme.spacing(120),
+						maxWidth: "100vw",
+						paddingRight: theme.spacing(120),
+					},
+					[theme.breakpoints.down("lg")]: {
+						paddingLeft: theme.spacing(24),
+						paddingRight: theme.spacing(24),
+					},
+				}),
+			},
+		},
+	},
 });
 
 export default theme;
