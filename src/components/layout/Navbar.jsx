@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Typography, Container } from "@mui/material";
 import NavLink from "./NavLink";
+import { Link } from "react-router";
 
 const navLinks = [
 	{ label: "Home", path: "/" },
@@ -28,7 +29,10 @@ const Navbar = () => {
 					variant="h1"
 					sx={{
 						color: "brand.neutral.100",
+						textDecoration: "none"
 					}}
+					to="/"
+					component={Link}
 				>
 					Trackzone
 				</Typography>
