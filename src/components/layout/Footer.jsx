@@ -1,4 +1,11 @@
-import { Box, Container, Typography, Link as MenuLink } from "@mui/material";
+import {
+	Box,
+	Container,
+	Typography,
+	Link as MenuLink,
+	useTheme,
+	useMediaQuery,
+} from "@mui/material";
 import React from "react";
 import { Link } from "react-router";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -6,10 +13,16 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import XIcon from "@mui/icons-material/X";
 
 const Footer = () => {
+	const theme = useTheme();
+	const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
 	return (
 		<Box
 			sx={{
-				height: 340,
+				minHeight: 300,
+				[theme.breakpoints.up("md")]: {
+					height: 340,
+				},
 				backgroundColor: "brand.neutral.400",
 				display: "flex",
 				flexDirection: "column",
@@ -20,17 +33,21 @@ const Footer = () => {
 				sx={{
 					flexGrow: 1,
 					display: "flex",
-					justifyContent: "space-between",
+					flexDirection: isMobile ? "column" : "row",
+					justifyContent: isMobile ? "flex-start" : "space-between",
+					gap: isMobile ? (theme) => theme.spacing(4) : 0,
 					mt: (theme) => theme.spacing(16),
+					mb: isMobile ? (theme) => theme.spacing(16) : 0,
 				}}
 			>
 				<Box
 					sx={{
-						width: 370,
-						maxHeight: 220,
+						width: isMobile ? "100%" : 370,
+						maxHeight: isMobile ? "none" : 220,
 						display: "flex",
 						flexDirection: "column",
 						justifyContent: "space-around",
+						gap: isMobile ? (theme) => theme.spacing(16) : 0,
 					}}
 				>
 					<Typography
@@ -41,19 +58,16 @@ const Footer = () => {
 					>
 						Trackzone
 					</Typography>
-					<Box
-						sx={{
-							color: "brand.gray.900",
-						}}
-					>
+					<Box sx={{ color: "brand.gray.900" }}>
 						<Typography variant="italicLabel">Developed By</Typography>
 						<Typography variant="h5">Tushar Biswas</Typography>
 						<Typography variant="h6">Full stack developer</Typography>
 						<Box
 							sx={{
 								display: "flex",
+								flexDirection: isMobile ? "column" : "row",
 								gap: (theme) => theme.spacing(4),
-								alignItems: "center",
+								alignItems: isMobile ? "flex-start" : "center",
 							}}
 						>
 							<Typography variant="h6">Mail: </Typography>
@@ -61,16 +75,17 @@ const Footer = () => {
 						</Box>
 					</Box>
 				</Box>
+
 				<Box
 					sx={{
-						width: 370,
-						maxHeight: 220,
-						px: (theme) => theme.spacing(78),
+						width: isMobile ? "100%" : 370,
+						maxHeight: isMobile ? "none" : 220,
+						px: isMobile ? 0 : (theme) => theme.spacing(78),
 						py: (theme) => theme.spacing(24),
 						color: "brand.gray.900",
 						display: "flex",
 						flexDirection: "column",
-						gap: (theme) => theme.spacing(24),
+						gap: isMobile ? (theme) => theme.spacing(12) : (theme) => theme.spacing(24),
 					}}
 				>
 					<Typography variant="h4">Links</Typography>
@@ -78,7 +93,9 @@ const Footer = () => {
 						sx={{
 							display: "flex",
 							flexDirection: "column",
-							gap: (theme) => theme.spacing(16),
+							gap: isMobile
+								? (theme) => theme.spacing(4)
+								: (theme) => theme.spacing(16),
 						}}
 					>
 						<Typography
@@ -105,16 +122,17 @@ const Footer = () => {
 						</Typography>
 					</Box>
 				</Box>
+
 				<Box
 					sx={{
-						width: 370,
-						maxHeight: 220,
-						px: (theme) => theme.spacing(78),
+						width: isMobile ? "100%" : 370,
+						maxHeight: isMobile ? "none" : 220,
+						px: isMobile ? 0 : (theme) => theme.spacing(78),
 						py: (theme) => theme.spacing(24),
 						color: "brand.gray.900",
 						display: "flex",
 						flexDirection: "column",
-						gap: (theme) => theme.spacing(24),
+						gap: isMobile ? (theme) => theme.spacing(12) : (theme) => theme.spacing(24),
 					}}
 				>
 					<Typography variant="h4">Socials</Typography>
@@ -128,38 +146,25 @@ const Footer = () => {
 						<MenuLink
 							component={Link}
 							to="#facebook"
-							sx={{
-								textDecoration: "none",
-								color: "brand.gray.900",
-							}}
+							sx={{ textDecoration: "none", color: "brand.gray.900" }}
 						>
 							<FacebookIcon
 								color="primary"
-								sx={{
-									fontSize: (theme) => theme.spacing(32),
-								}}
+								sx={{ fontSize: (theme) => theme.spacing(32) }}
 							/>
 						</MenuLink>
 						<MenuLink
-							sx={{
-								textDecoration: "none",
-								color: "brand.gray.900",
-							}}
+							sx={{ textDecoration: "none", color: "brand.gray.900" }}
 							component={Link}
 							to="#linkedin"
 						>
 							<LinkedInIcon
-								sx={{
-									fontSize: (theme) => theme.spacing(32),
-								}}
+								sx={{ fontSize: (theme) => theme.spacing(32) }}
 								color="primary"
 							/>
 						</MenuLink>
 						<MenuLink
-							sx={{
-								textDecoration: "none",
-								color: "brand.gray.900",
-							}}
+							sx={{ textDecoration: "none", color: "brand.gray.900" }}
 							component={Link}
 							to="#x"
 						>
@@ -168,24 +173,34 @@ const Footer = () => {
 									color: "brand.neutral.300",
 									backgroundColor: "brand.gray.900",
 									p: (theme) => theme.spacing(4),
-									borderRadius: 1
+									borderRadius: 1,
 								}}
 							/>
 						</MenuLink>
 					</Box>
 				</Box>
 			</Container>
+
 			<Box
 				sx={{
 					backgroundColor: "brand.gray.800",
-					height: 52,
+					minHeight: 52,
 					color: "brand.neutral.200",
 					display: "flex",
 					justifyContent: "center",
 					alignItems: "center",
+					py: (theme) => theme.spacing(12),
 				}}
 			>
-				<Typography variant="bodyLarge">Trackzone ©2025 All right reserved</Typography>
+				<Typography
+					variant="bodyLarge"
+					sx={{
+						textAlign: "center",
+						px: (theme) => theme.spacing(16),
+					}}
+				>
+					Trackzone ©2025 All right reserved
+				</Typography>
 			</Box>
 		</Box>
 	);
