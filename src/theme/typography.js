@@ -7,32 +7,31 @@ const typography = (theme) => ({
 		[theme.breakpoints.up("sm")]: { fontSize: 40 },
 	},
 	h2: {
-		fontSize: 28,
+		fontSize: 24,
 		fontWeight: 700,
 		[theme.breakpoints.up("sm")]: { fontSize: 32 },
 	},
 	h3: {
-		fontSize: 24,
-		fontWeight: 700,
-		[theme.breakpoints.up("sm")]: { fontSize: 28 },
-	},
-	h4: {
 		fontSize: 20,
 		fontWeight: 700,
 		[theme.breakpoints.up("sm")]: { fontSize: 24 },
 	},
-	h5: {
-		fontSize: 16,
+	h4: {
+		fontSize: 18,
 		fontWeight: 700,
 		[theme.breakpoints.up("sm")]: { fontSize: 20 },
 	},
-	h6: {
+	h5: {
 		fontSize: 14,
 		fontWeight: 700,
 		[theme.breakpoints.up("sm")]: { fontSize: 16 },
 	},
+	h6: {
+		fontSize: 12,
+		fontWeight: 700,
+	},
 	caption: {
-		fontSize: "0.75rem",
+		fontSize: 12,
 		fontWeight: 400,
 	},
 	button: {
@@ -54,7 +53,7 @@ const typography = (theme) => ({
 			[theme.breakpoints.up("sm")]: { fontSize: 18 },
 		},
 		medium: {
-			fontSize: "0.9375rem",
+			fontSize: 14,
 			fontWeight: 400,
 			[theme.breakpoints.up("sm")]: { fontSize: 16 },
 		},
