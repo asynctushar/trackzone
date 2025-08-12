@@ -3,16 +3,8 @@ import MuiCarousel from "react-material-ui-carousel";
 import { Box, Typography, useTheme } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import CircleIcon from "@mui/icons-material/Circle";
-import Feature1 from "../../../assets/images/Feature1.png";
 
-const items = [
-	{ name: "Feature 1", cover: Feature1 },
-	{ name: "Feature 2", cover: Feature1 },
-	{ name: "Feature 3", cover: Feature1 },
-	{ name: "Feature 4", cover: Feature1 },
-];
-
-const Carousel = () => {
+const Carousel = ({ items = [] }) => {
 	const theme = useTheme();
 
 	return (
