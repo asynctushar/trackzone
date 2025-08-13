@@ -10,6 +10,7 @@ const About = () => {
 			sx={(theme) => ({
 				display: "flex",
 				flexDirection: "column",
+				backgroundColor: "brand.neutral.100",
 				my: {
 					xs: theme.spacing(20), 
 					sm: theme.spacing(30), 
