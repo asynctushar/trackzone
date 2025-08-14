@@ -10,7 +10,7 @@ const CreateCard = ({ type = "Clock" }) => {
 		<Box
 			sx={{
 				width: "100%",
-				height: theme.spacing(400),
+				height: theme.spacing(420),
 				boxShadow: theme.brand.shadows.medium,
 				py: theme.spacing(24),
 				px: theme.spacing(24),
@@ -21,10 +21,15 @@ const CreateCard = ({ type = "Clock" }) => {
 				gap: theme.spacing(48),
 
 				[theme.breakpoints.up("sm")]: {
+					height: theme.spacing(450),
 					gap: theme.spacing(64),
 					py: theme.spacing(118),
-					px: theme.spacing(200),
+					px: theme.spacing(100),
 					boxShadow: theme.brand.shadows.high,
+				},
+
+				[theme.breakpoints.up("md")]: {
+					height: theme.spacing(480),
 				},
 			}}
 		>

@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography, styled } from "@mui/material";
 
-const StyledDisplayContainer = styled(Box)(({ theme, type }) => ({
+const StyledDisplayContainer = styled(Box)(({ theme, type, variant }) => ({
 	display: "flex",
 	flexDirection: "column",
 	width: "100%",
@@ -9,32 +9,40 @@ const StyledDisplayContainer = styled(Box)(({ theme, type }) => ({
 
 	[theme.breakpoints.up("sm")]: {
 		gap: theme.spacing(12),
+		width: "80%",
 		flexDirection: "row",
-		width: "70%",
 		alignItems: type === "desc" ? "start" : "center",
 	},
 
 	[theme.breakpoints.up("md")]: {
-		width: "40%",
+		width: variant === "Large" ? "50%" : "100%",
+	},
+
+	[theme.breakpoints.up("lg")]: {
+		width: variant === "Large" ? "45%" : "90%",
 	},
 }));
 
-const StyledLabel = styled(Typography)(({ theme }) => ({
+const StyledLabel = styled(Typography)(({ theme, variant }) => ({
 	...theme.typography["h5"],
-	maxWidth: "100%",
-	minWidth: "25%",
+	width: "100%",
 	color: theme.palette.brand.gray[700],
 
 	[theme.breakpoints.up("sm")]: {
-		maxWidth: "40%",
-		minWidth: "25%",
+		width: "40%",
+	},
+	[theme.breakpoints.up("md")]: {
+		width: "55%",
+	},
+	[theme.breakpoints.up("lg")]: {
+		width: variant === "Large" ? "25%" : "35%",
 	},
 }));
 
 const StyledColon = styled(Typography)(({ theme }) => ({
 	...theme.typography["h4"],
 	color: theme.palette.brand.gray[700],
-	width: "5%",
+	width: "2%",
 	display: "none",
 
 	[theme.breakpoints.up("sm")]: {
@@ -56,9 +64,9 @@ const StyledValue = styled(Typography)(({ type, theme }) => ({
 	},
 }));
 
-const DisplayItem = ({ label, value, type = "normal" }) => {
+const DisplayItem = ({ label, value, type = "normal", variant = "Large" }) => {
 	return (
-		<StyledDisplayContainer type={type}>
+		<StyledDisplayContainer variant={variant} type={type}>
 			<StyledLabel>{label}</StyledLabel>
 			<StyledColon>:</StyledColon>
 

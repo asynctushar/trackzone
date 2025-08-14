@@ -12,6 +12,7 @@ const Clocks = () => {
 				gap: theme.spacing(48),
 				py: theme.spacing(48),
 				alignItems: "center",
+				justifyContent: "space-between",
 			})}
 		>
 			<ClockCard type="Base" variant="Large" />
@@ -39,7 +40,9 @@ const Clocks = () => {
 				<Grid
 					container
 					spacing={{
-						sm: 48,
+						lg: 52,
+						md: 40,
+						sm: 32,
 						xs: 24,
 					}}
 				>
