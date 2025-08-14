@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
-import Form from "./comonents/Form";
+import Form from "./components/Form";
 
 const ContactUs = () => {
 	return (

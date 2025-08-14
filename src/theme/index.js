@@ -19,8 +19,13 @@ let theme = createTheme({
 		MuiButton: {
 			styleOverrides: {
 				root: ({ theme }) => ({
-					padding: `${theme.spacing(12)} ${theme.spacing(24)}`,
+					padding: `${theme.spacing(8)} ${theme.spacing(16)}`,
 					borderRadius: theme.brand.radius.small,
+					color: theme.palette.brand.neutral[200],
+
+					[theme.breakpoints.up("sm")]: {
+						padding: `${theme.spacing(12)} ${theme.spacing(24)}`,
+					},
 				}),
 			},
 			variants: [
@@ -28,9 +33,26 @@ let theme = createTheme({
 					props: { variant: "contained", color: "brandPrimary" },
 					style: ({ theme }) => ({
 						backgroundColor: theme.palette.brand.primary[500],
-						color: theme.palette.brand.neutral[100],
 						"&:hover": {
 							backgroundColor: theme.palette.brand.primary[600],
+						},
+					}),
+				},
+				{
+					props: { variant: "contained", color: "brandError" },
+					style: ({ theme }) => ({
+						backgroundColor: theme.palette.brand.error[500],
+						"&:hover": {
+							backgroundColor: theme.palette.brand.error[600],
+						},
+					}),
+				},
+				{
+					props: { variant: "contained", color: "brandWarning" },
+					style: ({ theme }) => ({
+						backgroundColor: theme.palette.brand.warning[500],
+						"&:hover": {
+							backgroundColor: theme.palette.brand.warning[600],
 						},
 					}),
 				},
