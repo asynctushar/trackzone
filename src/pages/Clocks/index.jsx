@@ -2,8 +2,28 @@ import { Box, Grid, Typography } from "@mui/material";
 import React from "react";
 import ClockCard from "../../components/shared/ClockCard";
 import CreateCard from "../../components/shared/CreateCard";
+import ClockModal from "../../components/shared/ClockModal";
+import { useState } from "react";
+import { useCallback } from "react";
 
 const Clocks = () => {
+	const [isModalOpen, setIsModalOpen] = useState(true);
+
+	const handleModalClose = useCallback(() => {
+		setIsModalOpen(false);
+		console.log("Modal Closed");
+	}, []);
+
+	const handleModalSubmit = useCallback(
+		(event) => {
+			event.preventDefault();
+
+			console.log("Modal form submitted");
+			setIsModalOpen(false);
+		},
+		[isModalOpen]
+	);
+
 	return (
 		<Box
 			sx={(theme) => ({
@@ -72,6 +92,13 @@ const Clocks = () => {
 					</Grid>
 				</Grid>
 			</Box>
+			<ClockModal
+				type="Base"
+				action="Create"
+				handleClose={handleModalClose}
+				open={isModalOpen}
+				handleSubmit={handleModalSubmit}
+			/>
 		</Box>
 	);
 };

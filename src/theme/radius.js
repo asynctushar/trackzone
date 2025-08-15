@@ -1,9 +1,9 @@
 const radius = {
 	none: 0,
-	small: 4,
-	medium: 8,
-	large: 12,
-	round: 9999,
+	small: "4px",
+	medium: "8px",
+	large: "12px",
+	round: "9999px",
 };
 
 export default radius;
