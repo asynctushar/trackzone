@@ -1,10 +1,8 @@
 import { Box, Grid, Typography } from "@mui/material";
-import React from "react";
 import ClockCard from "../../components/shared/ClockCard";
 import CreateCard from "../../components/shared/CreateCard";
 import ClockModal from "../../components/shared/ClockModal";
-import { useState } from "react";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
 const Clocks = () => {
 	const [isModalOpen, setIsModalOpen] = useState(true);
@@ -93,7 +91,7 @@ const Clocks = () => {
 				</Grid>
 			</Box>
 			<ClockModal
-				type="Base"
+				type="Other"
 				action="Create"
 				handleClose={handleModalClose}
 				open={isModalOpen}

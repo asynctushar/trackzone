@@ -1,7 +1,9 @@
 import { Box, Button, Dialog, DialogContent, Typography, useTheme } from "@mui/material";
 import React from "react";
+import InputTime from "../ui/InputTime";
+import TextArea from "../ui/TextArea";
 
-const ClockModal = ({ action = "Create", open, handleClose, handleSubmit }) => {
+const EventModal = ({ action = "Create", open, handleClose, handleSubmit }) => {
 	const theme = useTheme();
 
 	return (
@@ -31,23 +33,59 @@ const ClockModal = ({ action = "Create", open, handleClose, handleSubmit }) => {
 						width: "100%",
 						height: "100%",
 						display: "flex",
+						overflow: "hidden",
 						flexDirection: "column",
 						justifyContent: "space-between",
 						alignItems: "center",
 						minHeight: "inherit",
+						gap: {
+							xs: theme.spacing(32),
+							sm: theme.spacing(12),
+						},
 					}}
 				>
 					<Box
 						sx={{
-							textAlign: "center",
-							border: `1px solid ${theme.palette.brand.gray[400]}`,
-							px: theme.spacing(16),
-							py: theme.spacing(12),
-							borderRadius: theme.brand.radius.small,
+							display: "flex",
+							flexDirection: "column",
+							justifyContent: "center",
 						}}
 					>
-						<Typography variant="h2" color="brand.gray.800">
-							Event 1
+						<Box
+							component="input"
+							sx={{
+								width: {
+									xs: "90%",
+									sm: "70%",
+									md: "60%",
+								},
+								textAlign: "center",
+								fontFamily: theme.typography.h2,
+								color: "brand.gray.800",
+								border: `1px solid ${theme.palette.brand.error[400]}`,
+								px: theme.spacing(16),
+								py: theme.spacing(12),
+								mx: "auto",
+								borderRadius: theme.brand.radius.small,
+								"&:focus": {
+									outline: "none",
+									borderColor: theme.palette.brand.error[500],
+								},
+							}}
+						/>
+
+						<Typography
+							variant="caption"
+							color="brand.error.500"
+							sx={{
+								minHeight: theme.spacing(14),
+								lineHeight: theme.spacing(14),
+								marginTop: theme.spacing(4),
+								textAlign: "center",
+								p: 0,
+							}}
+						>
+							error
 						</Typography>
 					</Box>
 
@@ -65,7 +103,10 @@ const ClockModal = ({ action = "Create", open, handleClose, handleSubmit }) => {
 								width: "50%",
 							},
 						}}
-					></Box>
+					>
+						<InputTime name="time" label="Time" />
+						<TextArea label="Description" placeholder="Enter Description" rows={4} />
+					</Box>
 
 					<Box
 						sx={{
@@ -98,4 +139,4 @@ const ClockModal = ({ action = "Create", open, handleClose, handleSubmit }) => {
 	);
 };
 
-export default ClockModal;
+export default EventModal;

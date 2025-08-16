@@ -18,6 +18,7 @@ const StyledLabel = styled(Typography)(({ theme, hasError }) => ({
 	maxWidth: "40%",
 	minWidth: "25%",
 	color: hasError ? theme.palette.brand.error[500] : theme.palette.brand.gray[700],
+	textAlign: "left",
 
 	[theme.breakpoints.up("sm")]: {
 		paddingTop: theme.spacing(12),
@@ -58,6 +59,7 @@ const StyledTextArea = styled("textarea")(({ theme, hasError }) => ({
 	borderRadius: theme.spacing(4),
 	transition: "all ease-in 200ms",
 	width: "100%",
+	resize: "none",
 
 	"&::placeholder": {
 		...theme.typography["bodySmall"],

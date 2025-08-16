@@ -1,10 +1,28 @@
 import { Box, Typography, Grid } from "@mui/material";
-import React from "react";
+import { useCallback, useState } from "react";
 import ClockCard from "../../components/shared/ClockCard";
 import EventCard from "./components/EventCard";
 import CreateCard from "../../components/shared/CreateCard";
+import EventModal from "../../components/shared/EventModal";
 
 const Events = () => {
+	const [isModalOpen, setIsModalOpen] = useState(true);
+
+	const handleModalClose = useCallback(() => {
+		setIsModalOpen(false);
+		console.log("Modal Closed");
+	}, []);
+
+	const handleModalSubmit = useCallback(
+		(event) => {
+			event.preventDefault();
+
+			console.log("Modal form submitted");
+			setIsModalOpen(false);
+		},
+		[isModalOpen]
+	);
+
 	return (
 		<Box
 			sx={(theme) => ({
@@ -73,6 +91,13 @@ const Events = () => {
 					</Grid>
 				</Grid>
 			</Box>
+
+			<EventModal
+				action="Create"
+				handleClose={handleModalClose}
+				open={isModalOpen}
+				handleSubmit={handleModalSubmit}
+			/>
 		</Box>
 	);
 };

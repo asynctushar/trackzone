@@ -61,7 +61,7 @@ const StyledSelect = styled(MuiSelect)(({ theme, hasError }) => ({
 		border: "none",
 	},
 	[theme.breakpoints.up("sm")]: {
-		width: theme.spacing(250),
+		flex: 1
 	},
 }));
 

@@ -52,7 +52,7 @@ const StyledInputTime = styled(TimeField, {
 	textAlign: "left",
 	display: "flex",
 	alignItems: "center",
-    textTransform : "uppercase",
+	textTransform: "uppercase",
 
 	"&:hover": {
 		borderColor: hasError ? theme.palette.brand.error[500] : theme.palette.brand.gray[500],
@@ -64,11 +64,13 @@ const StyledInputTime = styled(TimeField, {
 
 	[theme.breakpoints.up("sm")]: {
 		width: theme.spacing(250),
+		flex: 1,
 	},
 
 	"& .MuiPickersInputBase-root": {
-		flex: 1, 
+		flex: 1,
 		height: "100%",
+		width: "100%",
 		"& fieldset": {
 			border: "none !important",
 		},
