@@ -1,6 +1,7 @@
 import { Box, Button, Dialog, DialogContent, Typography, useTheme } from "@mui/material";
 import React from "react";
 import Select from "../ui/Select";
+import InputTime from "../ui/InputTime";
 
 const timezones = [
 	{
@@ -72,13 +73,11 @@ const ClockModal = ({ type = "Base", action = "Create", open, handleClose, handl
 				sx={{
 					backgroundColor: theme.palette.brand.neutral[100],
 					py: {
-						xs: theme.spacing(8),
-						sm: theme.spacing(12),
+						xs: theme.spacing(32),
 						md: theme.spacing(48),
 					},
 					px: {
-						xs: theme.spacing(4),
-						sm: theme.spacing(24),
+						xs: theme.spacing(24),
 						md: theme.spacing(96),
 					},
 					minHeight: {
@@ -99,6 +98,10 @@ const ClockModal = ({ type = "Base", action = "Create", open, handleClose, handl
 						justifyContent: "space-between",
 						alignItems: "center",
 						minHeight: "inherit",
+						gap: {
+							xs: theme.spacing(32),
+							sm: theme.spacing(4)
+						}
 					}}
 				>
 					<Box
@@ -130,12 +133,7 @@ const ClockModal = ({ type = "Base", action = "Create", open, handleClose, handl
 							},
 						}}
 					>
-						{/* <InputTime
-							name="time"
-							label="Time"
-							placeholder="Select Time"
-							format="HH:mm:ss" // 24-hour format
-						/> */}
+						<InputTime name="time" label="Time" />
 						<Select
 							name="timezone"
 							label="Timezone"
@@ -154,16 +152,13 @@ const ClockModal = ({ type = "Base", action = "Create", open, handleClose, handl
 						sx={{
 							alignSelf: { xs: "center", md: "end" },
 							display: "flex",
-							flexDirection: { xs: "column-reverse", sm: "row" },
+							flexDirection: "row",
 							gap: {
 								xs: theme.spacing(8),
 								sm: theme.spacing(16),
 							},
 							width: "100%",
-							justifyContent: {
-								xs: "center",
-								sm: "end",
-							},
+							justifyContent: "end",
 						}}
 					>
 						<Button
