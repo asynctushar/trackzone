@@ -4,15 +4,28 @@ import ClockCard from "../../components/shared/ClockCard";
 import EventCard from "./components/EventCard";
 import CreateCard from "../../components/shared/CreateCard";
 import EventModal from "../../components/shared/EventModal";
+import DeleteDialog from "../../components/shared/DeleteDialog";
 
 const Events = () => {
 	const [isModalOpen, setIsModalOpen] = useState(true);
+	const [isDeleteOpen, setIsDeleteOpen] = useState(true);
+
+	const handleDeleteClose = useCallback(() => {
+		setIsDeleteOpen(false);
+		console.log("Modal Closed");
+	}, []);
 
 	const handleModalClose = useCallback(() => {
 		setIsModalOpen(false);
 		console.log("Modal Closed");
 	}, []);
 
+	const handleDeletSubmit = useCallback(
+		(event) => {
+			setIsDeleteOpen(false);
+		},
+		[isModalOpen]
+	);
 	const handleModalSubmit = useCallback(
 		(event) => {
 			event.preventDefault();
@@ -91,12 +104,18 @@ const Events = () => {
 					</Grid>
 				</Grid>
 			</Box>
-
 			<EventModal
 				action="Create"
 				handleClose={handleModalClose}
 				open={isModalOpen}
 				handleSubmit={handleModalSubmit}
+			/>
+
+			<DeleteDialog
+				type="Event"
+				handleClose={handleDeleteClose}
+				open={isDeleteOpen}
+				handleDeletSubmit={handleDeletSubmit}
 			/>
 		</Box>
 	);

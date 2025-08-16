@@ -2,6 +2,7 @@ import { Box, Button, Dialog, DialogContent, Typography, useTheme } from "@mui/m
 import React, { useState } from "react";
 import Select from "../ui/Select";
 import InputTime from "../ui/InputTime";
+import DeleteDialog from "./DeleteDialog";
 
 const timezones = [
 	{
