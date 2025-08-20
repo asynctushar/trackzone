@@ -1,9 +1,14 @@
 import { Box, Button, Typography, useTheme } from "@mui/material";
 import React from "react";
 import DisplayItem from "../ui/DisplayItem";
+import { useCallback } from "react";
 
-const ClockCard = ({ type = "Base", variant = "Large" }) => {
+const ClockCard = ({ type, variant, onUpdate, data, onDelete }) => {
 	const theme = useTheme();
+
+	const onEventsClick = useCallback(() => {
+		navigate(`/clocks/${data._id}/events`);
+	}, [data]);
 
 	return (
 		<Box
@@ -64,6 +69,7 @@ const ClockCard = ({ type = "Base", variant = "Large" }) => {
 					sx={{
 						alignSelf: "flex-end",
 					}}
+					onClick={() => onUpdate(data)}
 				>
 					Edit
 				</Button>
@@ -77,7 +83,7 @@ const ClockCard = ({ type = "Base", variant = "Large" }) => {
 						gap: theme.spacing(16),
 					}}
 				>
-					<Button color="brandWarning" variant="contained">
+					<Button color="brandWarning" variant="contained" onClick={onEventsClick}>
 						Events
 					</Button>
 
@@ -88,10 +94,18 @@ const ClockCard = ({ type = "Base", variant = "Large" }) => {
 							gap: theme.spacing(16),
 						}}
 					>
-						<Button color="brandError" variant="contained">
+						<Button
+							color="brandError"
+							variant="contained"
+							onClick={() => onDelete(data._id)}
+						>
 							Delete
 						</Button>
-						<Button color="brandPrimary" variant="contained">
+						<Button
+							color="brandPrimary"
+							variant="contained"
+							onClick={() => onUpdate(data)}
+						>
 							Edit
 						</Button>
 					</Box>
@@ -109,7 +123,7 @@ const ClockCard = ({ type = "Base", variant = "Large" }) => {
 					<Button color="brandError" variant="contained">
 						Delete
 					</Button>
-					<Button color="brandPrimary" variant="contained">
+					<Button color="brandPrimary" variant="contained" onClick={() => onUpdate(data)}>
 						Edit
 					</Button>
 				</Box>

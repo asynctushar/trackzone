@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Box, Button } from "@mui/material";
 import Carousel from "./Carousel";
 import Feature1 from "../../../assets/images/Feature1.png";
+import { useNavigate } from "react-router";
 
 const items = [
 	{ name: "Feature 1", cover: Feature1 },
@@ -11,6 +12,12 @@ const items = [
 ];
 
 const Hero = () => {
+	const navigate = useNavigate();
+
+	const clickHandler = useCallback(() => {
+		navigate("/clocks");
+	});
+
 	return (
 		<Box
 			sx={(theme) => ({
@@ -33,7 +40,7 @@ const Hero = () => {
 			})}
 		>
 			<Carousel items={items} />
-			<Button variant="contained" color="brandPrimary">
+			<Button variant="contained" color="brandPrimary" onClick={clickHandler}>
 				Get Stated
 			</Button>
 		</Box>

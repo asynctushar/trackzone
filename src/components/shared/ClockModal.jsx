@@ -2,7 +2,7 @@ import { Box, Button, Dialog, DialogContent, Typography, useTheme } from "@mui/m
 import React, { useState } from "react";
 import Select from "../ui/Select";
 import InputTime from "../ui/InputTime";
-import DeleteDialog from "./DeleteDialog";
+import DisplayItem from "../ui/DisplayItem";
 
 const timezones = [
 	{
@@ -65,8 +65,15 @@ const offsets = [
 	{ label: "+14:00", value: "+14.00" },
 ];
 
-const ClockModal = ({ type = "Base", action = "Create", open, handleClose, handleSubmit }) => {
+const ClockModal = ({ type, action, open, handleClose, handleSubmit }) => {
 	const theme = useTheme();
+	const [formData, setFormData] = useState({});
+
+	const handleFormSubmit = (event) => {
+		event.preventDefault();
+
+		handleSubmit(formData);
+	};
 
 	return (
 		<Dialog onClose={handleClose} open={open} maxWidth="lg" fullWidth>
@@ -90,7 +97,7 @@ const ClockModal = ({ type = "Base", action = "Create", open, handleClose, handl
 			>
 				<Box
 					component="form"
-					onSubmit={handleSubmit}
+					onSubmit={handleFormSubmit}
 					sx={{
 						width: "100%",
 						height: "100%",
@@ -150,7 +157,7 @@ const ClockModal = ({ type = "Base", action = "Create", open, handleClose, handl
 								}}
 							/>
 
-							<Typography
+							{/* <Typography
 								variant="caption"
 								color="brand.error.500"
 								sx={{
@@ -161,8 +168,8 @@ const ClockModal = ({ type = "Base", action = "Create", open, handleClose, handl
 									p: 0,
 								}}
 							>
-								error
-							</Typography>
+								
+							</Typography> */}
 						</Box>
 					)}
 
@@ -181,7 +188,11 @@ const ClockModal = ({ type = "Base", action = "Create", open, handleClose, handl
 							},
 						}}
 					>
-						<InputTime name="time" label="Time" />
+						{type === "Base" ? (
+							<InputTime name="time" label="Time" />
+						) : (
+							<DisplayItem variant="Modal" label="Time" value="12 : 03 : 23" />
+						)}
 						<Select
 							name="timezone"
 							label="Timezone"
@@ -214,6 +225,7 @@ const ClockModal = ({ type = "Base", action = "Create", open, handleClose, handl
 							type="button"
 							variant="contained"
 							color="brandError"
+							disabled={type === "Base" && action === "Create"}
 						>
 							Cancel
 						</Button>

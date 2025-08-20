@@ -3,7 +3,7 @@ import React from "react";
 import ClockIcon from "../../assets/images/ClockIcon.png";
 import EventIcon from "../../assets/images/EventIcon.png";
 
-const CreateCard = ({ type = "Clock" }) => {
+const CreateCard = ({ type = "Clock", onCreate }) => {
 	const theme = useTheme();
 
 	return (
@@ -43,7 +43,7 @@ const CreateCard = ({ type = "Clock" }) => {
 					objectFit: "cover",
 				}}
 			/>
-			<Button variant="contained" color="brandPrimary">
+			<Button variant="contained" color="brandPrimary" onClick={onCreate}>
 				{type === "Clock" ? "Add Clock" : "Add Event"}
 			</Button>
 		</Box>

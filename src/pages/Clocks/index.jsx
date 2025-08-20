@@ -2,25 +2,127 @@ import { Box, Grid, Typography } from "@mui/material";
 import ClockCard from "../../components/shared/ClockCard";
 import CreateCard from "../../components/shared/CreateCard";
 import ClockModal from "../../components/shared/ClockModal";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { getLocalStorage, setLocalStorage } from "../../utils/localStorage";
+import DeleteDialog from "../../components/shared/DeleteDialog";
 
 const Clocks = () => {
-	const [isModalOpen, setIsModalOpen] = useState(true);
+	const [baseClock, setBaseClock] = useState(null);
+	const [clocks, setClocks] = useState([]);
 
-	const handleModalClose = useCallback(() => {
-		setIsModalOpen(false);
-		console.log("Modal Closed");
+	const [deleteState, setDeleteState] = useState({
+		open: false,
+		id: null,
+	});
+	const [modalState, setModalState] = useState({
+		open: false,
+		type: null, // "Base" | "Other"
+		action: null, // "Create" | "Update"
+		data: null, // actual clock data
+	});
+
+	// Load baseClock initially
+	useEffect(() => {
+		const data = getLocalStorage("Base");
+		setBaseClock(data);
+
+		if (!data) {
+			// Case 1: No baseClock → open modal with Base Create
+			setModalState({
+				open: true,
+				type: "Base",
+				action: "Create",
+				data: null,
+			});
+		}
 	}, []);
 
-	const handleModalSubmit = useCallback(
-		(event) => {
-			event.preventDefault();
+	// Close modal
+	const handleModalClose = useCallback(() => {
+		setModalState((prev) => ({ ...prev, open: false }));
+	}, []);
 
-			console.log("Modal form submitted");
-			setIsModalOpen(false);
+	// Submit modal
+	const handleModalSubmit = useCallback(
+		(formData) => {
+			const { type, action, data } = modalState;
+
+			if (type === "Base") {
+				if (action === "Create") {
+					setBaseClock(formData);
+					setLocalStorage("base", formData);
+				} else if (action === "Update") {
+					setBaseClock(formData);
+					setLocalStorage("base", formData);
+				}
+			}
+
+			if (type === "Other") {
+				if (action === "Create") {
+					setClocks((prev) => [...prev, { id: Date.now(), ...formData }]);
+				} else if (action === "Update") {
+					setClocks((prev) =>
+						prev.map((clock) =>
+							clock.id === data.id ? { ...clock, ...formData } : clock
+						)
+					);
+				}
+			}
+
+			setModalState((prev) => ({ ...prev, open: false }));
 		},
-		[isModalOpen]
+		[modalState]
 	);
+
+	// 🔥 Triggers
+	const handleUpdateBaseClock = (data) => {
+		setModalState({
+			open: true,
+			type: "Base",
+			action: "Update",
+			data,
+		});
+	};
+
+	const handleUpdateOtherClock = (data) => {
+		setModalState({
+			open: true,
+			type: "Other",
+			action: "Update",
+			data,
+		});
+	};
+
+	const handleCreateOtherClock = () => {
+		setModalState({
+			open: true,
+			type: "Other",
+			action: "Create",
+			data: null,
+		});
+	};
+
+	const handleDeleteOtherClock = (id) => {
+		setDeleteState({
+			open: true,
+			id,
+		});
+	};
+
+	const handleDeleteSubmit = (id) => {
+		setClocks((prev) => prev.filter((clock) => clock._id !== id));
+		setDeleteState({
+			open: false,
+			id: null,
+		});
+	};
+
+	const handleDeleteClose = () => {
+		setDeleteState({
+			open: false,
+			id: null,
+		});
+	};
 
 	return (
 		<Box
@@ -33,7 +135,15 @@ const Clocks = () => {
 				justifyContent: "space-between",
 			})}
 		>
-			<ClockCard type="Base" variant="Large" />
+			{/* Base Clock */}
+			<ClockCard
+				type="Base"
+				variant="Large"
+				data={baseClock}
+				onUpdate={() => handleUpdateBaseClock(baseClock)}
+			/>
+
+			{/* Other Clocks */}
 			<Box
 				sx={(theme) => ({
 					width: "100%",
@@ -64,38 +174,39 @@ const Clocks = () => {
 						xs: 24,
 					}}
 				>
-					<Grid
-						size={{
-							xs: 12,
-							md: 6,
-						}}
-					>
-						<ClockCard type="Other" variant="Small" />
-					</Grid>
-					<Grid
-						size={{
-							xs: 12,
-							md: 6,
-						}}
-					>
-						<ClockCard type="Other" variant="Small" />
-					</Grid>
-					<Grid
-						size={{
-							xs: 12,
-							md: 6,
-						}}
-					>
-						<CreateCard type="Clock" />
+					{clocks.map((clock) => (
+						<Grid key={clock.id} size={{ xs: 12, md: 6 }}>
+							<ClockCard
+								type="Other"
+								variant="Small"
+								data={clock}
+								onUpdate={handleUpdateOtherClock}
+								onDelete={handleDeleteOtherClock}
+							/>
+						</Grid>
+					))}
+
+					<Grid size={{ xs: 12, md: 6 }}>
+						<CreateCard type="Clock" onCreate={handleCreateOtherClock} />
 					</Grid>
 				</Grid>
 			</Box>
+
+			{/* Modal */}
 			<ClockModal
-				type="Other"
-				action="Create"
+				type={modalState.type}
+				action={modalState.action}
+				data={modalState.data}
+				open={modalState.open}
 				handleClose={handleModalClose}
-				open={isModalOpen}
 				handleSubmit={handleModalSubmit}
+			/>
+			<DeleteDialog
+				type="Clock"
+				open={deleteState.open}
+				clockId={deleteState.id}
+				handleClose={handleDeleteClose}
+				handleDeletSubmit={handleDeleteSubmit}
 			/>
 		</Box>
 	);
