@@ -1,7 +1,7 @@
 import { Dialog, Button, DialogContent, Typography, Box } from "@mui/material";
 import React from "react";
 
-const DeleteDialog = ({ type, open, handleClose, handleDeletSubmit, clockId }) => {
+const DeleteDialog = ({ type, open, handleClose, handleDeletSubmit, id }) => {
 	return (
 		<Dialog onClose={handleClose} open={open} maxWidth="sm" fullWidth>
 			<DialogContent
@@ -44,7 +44,7 @@ const DeleteDialog = ({ type, open, handleClose, handleDeletSubmit, clockId }) =
 					<Button
 						variant="contained"
 						color="brandError"
-						onClick={() => handleDeletSubmit(clockId)}
+						onClick={() => handleDeletSubmit(id)}
 					>
 						Delete
 					</Button>

@@ -20,7 +20,6 @@ const ClockCard = ({ type, variant, onUpdate, data, onDelete }) => {
 		setTitle(data?.title ?? "");
 		setTimeZone(data?.timeZone ?? "");
 		setCoOrdinate(data?.coOrdinate ?? null);
-		setTimeDifference(data?.timeDifference ? format(data.timeDifference, "HH:mm:ss") : null);
 	}, [data]);
 
 	const onEventsClick = useCallback(() => {
@@ -58,7 +57,7 @@ const ClockCard = ({ type, variant, onUpdate, data, onDelete }) => {
 			}}
 		>
 			<Typography variant="h2" color="brand.gray.800">
-				{type === "Base" ? "Base Clock" : "Clock 1"}
+				{type === "Base" ? "Base Clock" : title}
 			</Typography>
 			<Box
 				sx={{
@@ -74,7 +73,9 @@ const ClockCard = ({ type, variant, onUpdate, data, onDelete }) => {
 			>
 				<DisplayItem variant={variant} label="Time" value={time} />
 				<DisplayItem variant={variant} label="Timezone" value={timeZone} />
-				<DisplayItem variant={variant} label="Co-ordinate" value={coOrdinate} />
+				{["GMT", "UTC"].includes(timeZone) && (
+					<DisplayItem variant={variant} label="Co-ordinate" value={coOrdinate} />
+				)}
 				{type === "Other" && (
 					<DisplayItem
 						variant={variant}

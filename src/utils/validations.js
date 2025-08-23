@@ -103,3 +103,22 @@ export const baseClockFormSchema = {
 		}, "Co-Ordinate is required"),
 	],
 };
+
+export const eventFormSchema = {
+	time: [
+		formValidation.custom(
+			(value) => value instanceof Date && !isNaN(value.getTime()),
+			"Time is required"
+		),
+	],
+	title: [
+		formValidation.required("Title is required"),
+		formValidation.minLength(2, "Title must be at least 2 characters"),
+		formValidation.maxLength(12, "Title must be less than 50 characters"),
+	],
+	description: [
+		formValidation.required("Description is required"),
+		formValidation.minLength(10, "Description must be at least 10 characters"),
+		formValidation.maxLength(500, "Description must be less than 500 characters"),
+	],
+};

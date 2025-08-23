@@ -107,7 +107,11 @@ const Clocks = () => {
 				}
 			}
 
-			setModalState((prev) => ({ ...prev, open: false }));
+			setModalState((prev) => ({
+				...prev,
+				open: false,
+				data: { ...prev.data, ...formData },
+			}));
 		},
 		[modalState]
 	);
@@ -220,7 +224,7 @@ const Clocks = () => {
 					}}
 				>
 					{clocks.map((clock) => (
-						<Grid key={clock.id} size={{ xs: 12, md: 6 }}>
+						<Grid key={clock._id} size={{ xs: 12, md: 6 }}>
 							<ClockCard
 								type="Other"
 								variant="Small"
@@ -249,7 +253,7 @@ const Clocks = () => {
 			<DeleteDialog
 				type="Clock"
 				open={deleteState.open}
-				clockId={deleteState._id}
+				id={deleteState._id}
 				handleClose={handleDeleteClose}
 				handleDeletSubmit={handleDeleteSubmit}
 			/>

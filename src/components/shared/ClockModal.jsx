@@ -94,7 +94,6 @@ const ClockModal = ({ type, action, open, handleClose, handleSubmit: handleFormS
 			  }
 			: defaultInitialValues;
 
-
 	const { handleSubmit, getFieldProps, isSubmitting, resetForm, values, errors, handleChange } =
 		useForm({
 			initialValues: mergedInitialValues,
@@ -109,7 +108,7 @@ const ClockModal = ({ type, action, open, handleClose, handleSubmit: handleFormS
 
 	useEffect(() => {
 		resetForm();
-	}, [type, action, data]);
+	}, [type, action, data, open, action]);
 
 	return (
 		<Dialog onClose={() => handleClose(isSubmitting)} open={open} maxWidth="lg" fullWidth>
@@ -194,7 +193,10 @@ const ClockModal = ({ type, action, open, handleClose, handleSubmit: handleFormS
 									borderRadius: theme.brand.radius.small,
 									"&:focus": {
 										outline: "none",
-										borderColor: theme.palette.brand.error[500],
+										borderColor: theme.palette.brand.gray[500],
+									},
+									"&::placeholder": {
+										color: theme.palette.brand.gray[400],
 									},
 								}}
 							/>
@@ -234,7 +236,6 @@ const ClockModal = ({ type, action, open, handleClose, handleSubmit: handleFormS
 							<InputTime
 								{...getFieldProps("time")}
 								onChange={(event) => {
-									console.log(event);
 
 									if (event && !isNaN(event.getTime())) {
 										handleChange({ target: { name: "time", value: event } });
@@ -281,7 +282,9 @@ const ClockModal = ({ type, action, open, handleClose, handleSubmit: handleFormS
 						}}
 					>
 						<Button
-							onClick={() => handleClose(isSubmitting)}
+							onClick={() => {
+								handleClose(isSubmitting);
+							}}
 							type="button"
 							variant="contained"
 							color="brandError"

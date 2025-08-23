@@ -1,9 +1,22 @@
 import { Box, Button, Typography, useTheme } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DisplayItem from "../../../components/ui/DisplayItem";
+import { format } from "date-fns";
 
-const EventCard = () => {
+const EventCard = ({ event, onUpdate, onDelete }) => {
 	const theme = useTheme();
+
+	const [title, setTitle] = useState("");
+	const [time, setTime] = useState(null);
+	const [description, setDescription] = useState("");
+	const [timeDifference, setTimeDifference] = useState(null);
+	const [timeLeft, setTimeLeft] = useState(null);
+
+	useEffect(() => {
+		setTime(event?.time ? format(event.time, "HH:mm:ss") : null);
+		setTitle(event?.title ?? "");
+		setDescription(event?.description);
+	}, [event]);
 
 	return (
 		<Box
@@ -27,7 +40,7 @@ const EventCard = () => {
 			}}
 		>
 			<Typography variant="h2" color="brand.gray.800">
-				Event 1
+				{title}
 			</Typography>
 			<Box
 				sx={{
@@ -41,15 +54,10 @@ const EventCard = () => {
 					},
 				}}
 			>
-				<DisplayItem variant="Small" label="Time" value="12 : 03 : 23" />
-				<DisplayItem variant="Small" label="Difference(Base)" value="12 : 03 : 23" />
-				<DisplayItem variant="Small" label="Time Left" value="12 : 03 : 23" />
-				<DisplayItem
-					variant="Small"
-					label="Description"
-					type="desc"
-					value="Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione consectetur quibusdam quam est! Autem architecto, quasi alias consectetur fugiat nam tenetur incidunt quaerat quibusdam unde voluptate vitae. Ipsa, commodi quidem."
-				/>
+				<DisplayItem variant="Small" label="Time" value={time} />
+				<DisplayItem variant="Small" label="Difference(Base)" value={timeDifference} />
+				<DisplayItem variant="Small" label="Time Left" value={timeLeft} />
+				<DisplayItem variant="Small" label="Description" type="desc" value={description} />
 			</Box>
 
 			<Box
@@ -61,10 +69,10 @@ const EventCard = () => {
 					gap: theme.spacing(16),
 				}}
 			>
-				<Button color="brandError" variant="contained">
+				<Button color="brandError" variant="contained" onClick={() => onDelete(event._id)}>
 					Delete
 				</Button>
-				<Button color="brandPrimary" variant="contained">
+				<Button color="brandPrimary" variant="contained" onClick={() => onUpdate(event)}>
 					Edit
 				</Button>
 			</Box>

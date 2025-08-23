@@ -2,12 +2,45 @@ import { Box, Button, Dialog, DialogContent, Typography, useTheme } from "@mui/m
 import React, { useState } from "react";
 import InputTime from "../ui/InputTime";
 import TextArea from "../ui/TextArea";
+import { eventFormSchema } from "../../utils/validations";
+import useForm from "../../hooks/useForm";
+import { useEffect } from "react";
 
-const EventModal = ({ action = "Create", open, handleClose, handleSubmit }) => {
+const initialValues = {
+	title: "",
+	time: new Date(0, 0, 0, 0, 0),
+	desciption: "",
+};
+
+const EventModal = ({ action, open, handleClose, handleSubmit: handleFormSubmit, data, clock }) => {
 	const theme = useTheme();
 
+	const mergedInitialValues =
+		action === "Update"
+			? {
+					initialValues,
+					...data,
+					...(data.time ? { time: new Date(data.time) } : {}),
+			  }
+			: initialValues;
+
+	const { handleSubmit, getFieldProps, isSubmitting, resetForm, errors, handleChange } = useForm({
+		initialValues: mergedInitialValues,
+		validationSchema: eventFormSchema,
+		onSubmit: async (formData) => {
+			handleFormSubmit(formData);
+			resetForm();
+		},
+		validateOnChange: true,
+		validateOnBlur: true,
+	});
+
+	useEffect(() => {
+		resetForm();
+	}, [action, data, open, action]);
+
 	return (
-		<Dialog onClose={handleClose} open={open} maxWidth="lg" fullWidth>
+		<Dialog onClose={() => handleClose(isSubmitting)} open={open} maxWidth="lg" fullWidth>
 			<DialogContent
 				sx={{
 					backgroundColor: theme.palette.brand.neutral[100],
@@ -53,6 +86,8 @@ const EventModal = ({ action = "Create", open, handleClose, handleSubmit }) => {
 					>
 						<Box
 							component="input"
+							{...getFieldProps("title")}
+							placeholder="Event Title"
 							sx={{
 								width: {
 									xs: "90%",
@@ -62,14 +97,21 @@ const EventModal = ({ action = "Create", open, handleClose, handleSubmit }) => {
 								textAlign: "center",
 								fontFamily: theme.typography.h2,
 								color: "brand.gray.800",
-								border: `1px solid ${theme.palette.brand.error[400]}`,
+								border: `1px solid ${
+									errors.title
+										? theme.palette.brand.error[400]
+										: theme.palette.brand.gray[400]
+								}`,
 								px: theme.spacing(16),
 								py: theme.spacing(12),
 								mx: "auto",
 								borderRadius: theme.brand.radius.small,
 								"&:focus": {
 									outline: "none",
-									borderColor: theme.palette.brand.error[500],
+									borderColor: theme.palette.brand.gray[500],
+								},
+								"&::placeholder": {
+									color: theme.palette.brand.gray[400],
 								},
 							}}
 						/>
@@ -85,7 +127,7 @@ const EventModal = ({ action = "Create", open, handleClose, handleSubmit }) => {
 								p: 0,
 							}}
 						>
-							error
+							{errors.title}
 						</Typography>
 					</Box>
 
@@ -104,8 +146,25 @@ const EventModal = ({ action = "Create", open, handleClose, handleSubmit }) => {
 							},
 						}}
 					>
-						<InputTime name="time" label="Time" />
-						<TextArea label="Description" placeholder="Enter Description" rows={4} />
+						<InputTime
+							{...getFieldProps("time")}
+							onChange={(event) => {
+								if (event && !isNaN(event.getTime())) {
+									handleChange({ target: { name: "time", value: event } });
+								} else {
+									// if you want to keep null in state
+									handleChange({ target: { name: "time", value: null } });
+								}
+							}}
+							name="time"
+							label="Time"
+						/>
+						<TextArea
+							{...getFieldProps("description")}
+							label="Description"
+							placeholder="Enter Description"
+							rows={4}
+						/>
 					</Box>
 
 					<Box
@@ -122,7 +181,7 @@ const EventModal = ({ action = "Create", open, handleClose, handleSubmit }) => {
 						}}
 					>
 						<Button
-							onClick={handleClose}
+							onClick={() => handleClose(isSubmitting)}
 							type="button"
 							variant="contained"
 							color="brandError"

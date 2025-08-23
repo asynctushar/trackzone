@@ -3,7 +3,7 @@ import React from "react";
 import ClockIcon from "../../assets/images/ClockIcon.png";
 import EventIcon from "../../assets/images/EventIcon.png";
 
-const CreateCard = ({ type = "Clock", onCreate }) => {
+const CreateCard = ({ type, onCreate }) => {
 	const theme = useTheme();
 
 	return (
