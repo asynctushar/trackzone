@@ -3,6 +3,9 @@ import React, { useState } from "react";
 import Select from "../ui/Select";
 import InputTime from "../ui/InputTime";
 import DisplayItem from "../ui/DisplayItem";
+import { baseClockFormSchema, otherClockFormSchema } from "../../utils/validations";
+import useForm from "../../hooks/useForm";
+import { useEffect } from "react";
 
 const timezones = [
 	{
@@ -65,18 +68,51 @@ const offsets = [
 	{ label: "+14:00", value: "+14.00" },
 ];
 
-const ClockModal = ({ type, action, open, handleClose, handleSubmit }) => {
+const baseClockInitialValues = {
+	time: new Date(0, 0, 0, 0, 0),
+	timeZone: "",
+	coOrdinate: "",
+};
+
+const otherClockInitialValues = {
+	title: "",
+	timeZone: "",
+	coOrdinate: "",
+};
+
+const ClockModal = ({ type, action, open, handleClose, handleSubmit: handleFormSubmit, data }) => {
 	const theme = useTheme();
-	const [formData, setFormData] = useState({});
 
-	const handleFormSubmit = (event) => {
-		event.preventDefault();
+	const defaultInitialValues = type === "Base" ? baseClockInitialValues : otherClockInitialValues;
 
-		handleSubmit(formData);
-	};
+	const mergedInitialValues =
+		action === "Update"
+			? {
+					...defaultInitialValues,
+					...data,
+					...(type === "Base" && data.time ? { time: new Date(data.time) } : {}),
+			  }
+			: defaultInitialValues;
+
+
+	const { handleSubmit, getFieldProps, isSubmitting, resetForm, values, errors, handleChange } =
+		useForm({
+			initialValues: mergedInitialValues,
+			validationSchema: type === "Base" ? baseClockFormSchema : otherClockFormSchema,
+			onSubmit: async (formData) => {
+				handleFormSubmit(formData);
+				resetForm();
+			},
+			validateOnChange: true,
+			validateOnBlur: true,
+		});
+
+	useEffect(() => {
+		resetForm();
+	}, [type, action, data]);
 
 	return (
-		<Dialog onClose={handleClose} open={open} maxWidth="lg" fullWidth>
+		<Dialog onClose={() => handleClose(isSubmitting)} open={open} maxWidth="lg" fullWidth>
 			<DialogContent
 				sx={{
 					backgroundColor: theme.palette.brand.neutral[100],
@@ -97,7 +133,7 @@ const ClockModal = ({ type, action, open, handleClose, handleSubmit }) => {
 			>
 				<Box
 					component="form"
-					onSubmit={handleFormSubmit}
+					onSubmit={handleSubmit}
 					sx={{
 						width: "100%",
 						height: "100%",
@@ -136,6 +172,8 @@ const ClockModal = ({ type, action, open, handleClose, handleSubmit }) => {
 						>
 							<Box
 								component="input"
+								{...getFieldProps("title")}
+								placeholder="Clock Title"
 								sx={{
 									width: {
 										xs: "90%",
@@ -145,7 +183,11 @@ const ClockModal = ({ type, action, open, handleClose, handleSubmit }) => {
 									textAlign: "center",
 									fontFamily: theme.typography.h2,
 									color: "brand.gray.800",
-									border: `1px solid ${theme.palette.brand.error[400]}`,
+									border: `1px solid ${
+										errors.title
+											? theme.palette.brand.error[400]
+											: theme.palette.brand.gray[400]
+									}`,
 									px: theme.spacing(16),
 									py: theme.spacing(12),
 									mx: "auto",
@@ -157,7 +199,7 @@ const ClockModal = ({ type, action, open, handleClose, handleSubmit }) => {
 								}}
 							/>
 
-							{/* <Typography
+							<Typography
 								variant="caption"
 								color="brand.error.500"
 								sx={{
@@ -168,8 +210,8 @@ const ClockModal = ({ type, action, open, handleClose, handleSubmit }) => {
 									p: 0,
 								}}
 							>
-								
-							</Typography> */}
+								{errors.title}
+							</Typography>
 						</Box>
 					)}
 
@@ -189,22 +231,40 @@ const ClockModal = ({ type, action, open, handleClose, handleSubmit }) => {
 						}}
 					>
 						{type === "Base" ? (
-							<InputTime name="time" label="Time" />
+							<InputTime
+								{...getFieldProps("time")}
+								onChange={(event) => {
+									console.log(event);
+
+									if (event && !isNaN(event.getTime())) {
+										handleChange({ target: { name: "time", value: event } });
+									} else {
+										// if you want to keep null in state
+										handleChange({ target: { name: "time", value: null } });
+									}
+								}}
+								name="time"
+								label="Time"
+							/>
 						) : (
 							<DisplayItem variant="Modal" label="Time" value="12 : 03 : 23" />
 						)}
 						<Select
-							name="timezone"
-							label="Timezone"
+							name="timeZone"
+							label="TimeZone"
 							placeholder="Select timezone"
 							options={timezones}
+							{...getFieldProps("timeZone")}
 						/>
-						<Select
-							name="co-ordinate"
-							label="Co-ordinate"
-							placeholder="Select co-ordinate"
-							options={offsets}
-						/>
+						{["GMT", "UTC"].includes(values.timeZone) && (
+							<Select
+								{...getFieldProps("coOrdinate")}
+								name="coOrdinate"
+								label="Co-ordinate"
+								placeholder="Select co-ordinate"
+								options={offsets}
+							/>
+						)}
 					</Box>
 
 					<Box
@@ -221,15 +281,20 @@ const ClockModal = ({ type, action, open, handleClose, handleSubmit }) => {
 						}}
 					>
 						<Button
-							onClick={handleClose}
+							onClick={() => handleClose(isSubmitting)}
 							type="button"
 							variant="contained"
 							color="brandError"
-							disabled={type === "Base" && action === "Create"}
+							disabled={(type === "Base" && action === "Create") || isSubmitting}
 						>
 							Cancel
 						</Button>
-						<Button type="submit" variant="contained" color="brandPrimary">
+						<Button
+							type="submit"
+							variant="contained"
+							color="brandPrimary"
+							disabled={isSubmitting}
+						>
 							{action}
 						</Button>
 					</Box>

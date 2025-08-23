@@ -12,7 +12,7 @@ const Clocks = () => {
 
 	const [deleteState, setDeleteState] = useState({
 		open: false,
-		id: null,
+		_id: null,
 	});
 	const [modalState, setModalState] = useState({
 		open: false,
@@ -21,10 +21,16 @@ const Clocks = () => {
 		data: null, // actual clock data
 	});
 
-	// Load baseClock initially
+	// Load baseClock and other clocks initially
 	useEffect(() => {
 		const data = getLocalStorage("Base");
 		setBaseClock(data);
+
+		const othersClocks = getLocalStorage("Others");
+
+		if (othersClocks !== null) {
+			setClocks(othersClocks);
+		}
 
 		if (!data) {
 			// Case 1: No baseClock → open modal with Base Create
@@ -38,8 +44,10 @@ const Clocks = () => {
 	}, []);
 
 	// Close modal
-	const handleModalClose = useCallback(() => {
-		setModalState((prev) => ({ ...prev, open: false }));
+	const handleModalClose = useCallback((isSubmitting) => {
+		if (!isSubmitting) {
+			setModalState((prev) => ({ ...prev, open: false }));
+		}
 	}, []);
 
 	// Submit modal
@@ -50,22 +58,52 @@ const Clocks = () => {
 			if (type === "Base") {
 				if (action === "Create") {
 					setBaseClock(formData);
-					setLocalStorage("base", formData);
+					setLocalStorage("Base", formData);
 				} else if (action === "Update") {
-					setBaseClock(formData);
-					setLocalStorage("base", formData);
+					setBaseClock((prev) => {
+						const newData = { ...prev, ...formData };
+
+						// cleanup after merge
+						if (!["GMT", "UTC"].includes(newData.timeZone)) {
+							delete newData.coOrdinate;
+						}
+						setLocalStorage("Base", newData);
+
+						return newData;
+					});
 				}
 			}
 
 			if (type === "Other") {
 				if (action === "Create") {
-					setClocks((prev) => [...prev, { id: Date.now(), ...formData }]);
+					setClocks((prev) => {
+						const newClock = {
+							_id: Math.random().toString(36).substr(2, 9), // random string id
+							...formData,
+						};
+
+						const newData = [...prev, newClock];
+						setLocalStorage("Others", newData);
+
+						return newData;
+					});
 				} else if (action === "Update") {
-					setClocks((prev) =>
-						prev.map((clock) =>
-							clock.id === data.id ? { ...clock, ...formData } : clock
-						)
-					);
+					setClocks((prev) => {
+						const newClocks = prev.map((clock) => {
+							const newClock =
+								clock._id === data._id ? { ...clock, ...formData } : { ...clock };
+
+							// cleanup after merge
+							if (!["GMT", "UTC"].includes(newClock.timeZone)) {
+								delete newClock.coOrdinate;
+							}
+
+							return newClock;
+						});
+
+						setLocalStorage("Others", newClocks);
+						return newClocks;
+					});
 				}
 			}
 
@@ -105,22 +143,29 @@ const Clocks = () => {
 	const handleDeleteOtherClock = (id) => {
 		setDeleteState({
 			open: true,
-			id,
+			_id: id,
 		});
 	};
 
+	// delete submit
 	const handleDeleteSubmit = (id) => {
-		setClocks((prev) => prev.filter((clock) => clock._id !== id));
+		setClocks((prev) => {
+			const newClocks = prev.filter((clock) => clock._id !== id);
+			setLocalStorage("Others", newClocks);
+
+			return newClocks;
+		});
+
 		setDeleteState({
 			open: false,
-			id: null,
+			_id: null,
 		});
 	};
 
 	const handleDeleteClose = () => {
 		setDeleteState({
 			open: false,
-			id: null,
+			_id: null,
 		});
 	};
 
@@ -204,7 +249,7 @@ const Clocks = () => {
 			<DeleteDialog
 				type="Clock"
 				open={deleteState.open}
-				clockId={deleteState.id}
+				clockId={deleteState._id}
 				handleClose={handleDeleteClose}
 				handleDeletSubmit={handleDeleteSubmit}
 			/>

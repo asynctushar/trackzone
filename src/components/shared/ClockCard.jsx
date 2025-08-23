@@ -1,10 +1,27 @@
 import { Box, Button, Typography, useTheme } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DisplayItem from "../ui/DisplayItem";
 import { useCallback } from "react";
+import { format } from "date-fns";
+import { useNavigate } from "react-router";
 
 const ClockCard = ({ type, variant, onUpdate, data, onDelete }) => {
 	const theme = useTheme();
+	const navigate = useNavigate();
+
+	const [title, setTitle] = useState("");
+	const [time, setTime] = useState(null);
+	const [timeZone, setTimeZone] = useState("");
+	const [coOrdinate, setCoOrdinate] = useState(null);
+	const [timeDifference, setTimeDifference] = useState(null);
+
+	useEffect(() => {
+		setTime(data?.time ? format(data.time, "HH:mm:ss") : null);
+		setTitle(data?.title ?? "");
+		setTimeZone(data?.timeZone ?? "");
+		setCoOrdinate(data?.coOrdinate ?? null);
+		setTimeDifference(data?.timeDifference ? format(data.timeDifference, "HH:mm:ss") : null);
+	}, [data]);
 
 	const onEventsClick = useCallback(() => {
 		navigate(`/clocks/${data._id}/events`);
@@ -55,11 +72,15 @@ const ClockCard = ({ type, variant, onUpdate, data, onDelete }) => {
 					},
 				}}
 			>
-				<DisplayItem variant={variant} label="Time" value="12 : 03 : 23" />
-				<DisplayItem variant={variant} label="Timezone" value="UTC" />
-				<DisplayItem variant={variant} label="Co-ordinate" value="+5.50" />
+				<DisplayItem variant={variant} label="Time" value={time} />
+				<DisplayItem variant={variant} label="Timezone" value={timeZone} />
+				<DisplayItem variant={variant} label="Co-ordinate" value={coOrdinate} />
 				{type === "Other" && (
-					<DisplayItem variant={variant} label="Difference(Base)" value="12 : 03 : 23" />
+					<DisplayItem
+						variant={variant}
+						label="Difference(Base)"
+						value={timeDifference}
+					/>
 				)}
 			</Box>
 			{type === "Base" ? (
@@ -120,7 +141,11 @@ const ClockCard = ({ type, variant, onUpdate, data, onDelete }) => {
 						gap: theme.spacing(16),
 					}}
 				>
-					<Button color="brandError" variant="contained">
+					<Button
+						color="brandError"
+						variant="contained"
+						onClick={() => onDelete(data._id)}
+					>
 						Delete
 					</Button>
 					<Button color="brandPrimary" variant="contained" onClick={() => onUpdate(data)}>

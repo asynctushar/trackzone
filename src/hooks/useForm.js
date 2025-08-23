@@ -20,12 +20,12 @@ const useForm = ({
 			if (!validator) return "";
 
 			if (typeof validator === "function") {
-				return validator(value);
+				return validator(value, values);
 			}
 
 			if (Array.isArray(validator)) {
 				for (const rule of validator) {
-					const error = rule(value);
+					const error = rule(value, values);
 					if (error) return error;
 				}
 			}
@@ -41,7 +41,7 @@ const useForm = ({
 		let isValid = true;
 
 		Object.keys(validationSchema).forEach((fieldName) => {
-			const error = validateField(fieldName, values[fieldName] || "");
+			const error = validateField(fieldName, values[fieldName] || "", values);
 			newErrors[fieldName] = error;
 			if (error) isValid = false;
 		});
@@ -62,7 +62,7 @@ const useForm = ({
 
 			// Validate on change if enabled and field has been touched or is focused
 			if (validateOnChange && (touched[name] || focusedField === name)) {
-				const error = validateField(name, value);
+				const error = validateField(name, value, values);
 				setErrors((prev) => ({
 					...prev,
 					[name]: error,
@@ -90,7 +90,7 @@ const useForm = ({
 
 			// Validate on blur if enabled
 			if (validateOnBlur) {
-				const error = validateField(name, value);
+				const error = validateField(name, value, values);
 				setErrors((prev) => ({
 					...prev,
 					[name]: error,
@@ -168,7 +168,7 @@ const useForm = ({
 
 			// Validate if field has been touched
 			if (touched[fieldName]) {
-				const error = validateField(fieldName, value);
+				const error = validateField(fieldName, value, values);
 				setErrors((prev) => ({
 					...prev,
 					[fieldName]: error,
