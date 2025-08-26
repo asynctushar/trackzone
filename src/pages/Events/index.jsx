@@ -275,6 +275,7 @@ const Events = () => {
 						data={clock}
 						onUpdate={handleUpdateClock}
 						onDelete={handleDeleteClock}
+						baseClock={baseClock}
 					/>
 					<Box
 						sx={(theme) => ({
@@ -318,6 +319,7 @@ const Events = () => {
 										event={event}
 										onDelete={handleDeleteEvent}
 										onUpdate={handleUpdateEvent}
+										baseClock={baseClock}
 									/>
 								</Grid>
 							))}
@@ -339,6 +341,7 @@ const Events = () => {
 							open={modalState.open}
 							handleSubmit={handleModalSubmit}
 							data={modalState.data}
+							baseClock={baseClock}
 						/>
 					) : (
 						<EventModal

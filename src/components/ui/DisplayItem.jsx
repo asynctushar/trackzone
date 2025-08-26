@@ -29,24 +29,24 @@ const StyledLabel = styled(Typography)(({ theme, variant }) => ({
 	textAlign: "left",
 	...(variant === "Modal"
 		? {
-				maxWidth: "40%",
-				minWidth: "25%",
-		  }
+			maxWidth: "40%",
+			minWidth: "25%",
+		}
 		: {
-				width: "100%",
-				color: theme.palette.brand.gray[700],
-				maxWidth: "40%",
-				minWidth: "25%",
-				[theme.breakpoints.up("sm")]: {
-					width: "40%",
-				},
-				[theme.breakpoints.up("md")]: {
-					width: "55%",
-				},
-				[theme.breakpoints.up("lg")]: {
-					width: variant === "Large" ? "25%" : "35%",
-				},
-		  }),
+			width: "100%",
+			color: theme.palette.brand.gray[700],
+			maxWidth: "40%",
+			minWidth: "25%",
+			[theme.breakpoints.up("sm")]: {
+				width: "40%",
+			},
+			[theme.breakpoints.up("md")]: {
+				width: "55%",
+			},
+			[theme.breakpoints.up("lg")]: {
+				width: variant === "Large" ? "25%" : "35%",
+			},
+		}),
 }));
 
 const StyledColon = styled(Typography)(({ theme, variant }) => ({

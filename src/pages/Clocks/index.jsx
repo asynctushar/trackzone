@@ -5,6 +5,7 @@ import ClockModal from "../../components/shared/ClockModal";
 import { useCallback, useEffect, useState } from "react";
 import { getLocalStorage, setLocalStorage } from "../../utils/localStorage";
 import DeleteDialog from "../../components/shared/DeleteDialog";
+import { differenceInMilliseconds } from "date-fns";
 
 const Clocks = () => {
 	const [baseClock, setBaseClock] = useState(null);
@@ -57,18 +58,37 @@ const Clocks = () => {
 
 			if (type === "Base") {
 				if (action === "Create") {
-					setBaseClock(formData);
-					setLocalStorage("Base", formData);
+					// compute timeDifference before saving
+					let newData = { ...formData };
+
+					if (formData.time) {
+						newData.timeDifference = differenceInMilliseconds(
+							new Date(formData.time),
+							Date.now()
+						);
+						delete newData.time; // remove absolute time if not needed
+					}
+
+					setBaseClock(newData);
+					setLocalStorage("Base", newData);
 				} else if (action === "Update") {
 					setBaseClock((prev) => {
-						const newData = { ...prev, ...formData };
+						let newData = { ...prev, ...formData };
+
+						if (formData.time) {
+							newData.timeDifference = differenceInMilliseconds(
+								new Date(formData.time),
+								Date.now()
+							);
+							delete newData.time;
+						}
 
 						// cleanup after merge
 						if (!["GMT", "UTC"].includes(newData.timeZone)) {
 							delete newData.coOrdinate;
 						}
-						setLocalStorage("Base", newData);
 
+						setLocalStorage("Base", newData);
 						return newData;
 					});
 				}
@@ -231,6 +251,7 @@ const Clocks = () => {
 								data={clock}
 								onUpdate={handleUpdateOtherClock}
 								onDelete={handleDeleteOtherClock}
+								baseClock={baseClock}
 							/>
 						</Grid>
 					))}
@@ -249,6 +270,7 @@ const Clocks = () => {
 				open={modalState.open}
 				handleClose={handleModalClose}
 				handleSubmit={handleModalSubmit}
+				baseClock={baseClock}
 			/>
 			<DeleteDialog
 				type="Clock"

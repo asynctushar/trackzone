@@ -6,67 +6,10 @@ import DisplayItem from "../ui/DisplayItem";
 import { baseClockFormSchema, otherClockFormSchema } from "../../utils/validations";
 import useForm from "../../hooks/useForm";
 import { useEffect } from "react";
+import { addMilliseconds, format } from "date-fns";
+import { getOtherClockTime, offsets, getTimeZones } from "../../utils/clock";
 
-const timezones = [
-	{
-		label: "UTC",
-		value: "UTC",
-	},
-	{
-		label: "EST",
-		value: "EST",
-	},
-	{
-		label: "PST",
-		value: "PST",
-	},
-	{
-		label: "GMT",
-		value: "GMT",
-	},
-];
-
-const offsets = [
-	{ label: "-12:00", value: "-12.00" },
-	{ label: "-11:00", value: "-11.00" },
-	{ label: "-10:00", value: "-10.00" },
-	{ label: "-09:30", value: "-09.50" },
-	{ label: "-09:00", value: "-09.00" },
-	{ label: "-08:00", value: "-08.00" },
-	{ label: "-07:00", value: "-07.00" },
-	{ label: "-06:00", value: "-06.00" },
-	{ label: "-05:00", value: "-05.00" },
-	{ label: "-04:30", value: "-04.50" },
-	{ label: "-04:00", value: "-04.00" },
-	{ label: "-03:30", value: "-03.50" },
-	{ label: "-03:00", value: "-03.00" },
-	{ label: "-02:00", value: "-02.00" },
-	{ label: "-01:00", value: "-01.00" },
-	{ label: "+00:00", value: "+00.00" },
-	{ label: "+01:00", value: "+01.00" },
-	{ label: "+02:00", value: "+02.00" },
-	{ label: "+03:00", value: "+03.00" },
-	{ label: "+03:30", value: "+03.50" },
-	{ label: "+04:00", value: "+04.00" },
-	{ label: "+04:30", value: "+04.50" },
-	{ label: "+05:00", value: "+05.00" },
-	{ label: "+05:30", value: "+05.50" },
-	{ label: "+05:45", value: "+05.75" },
-	{ label: "+06:00", value: "+06.00" },
-	{ label: "+06:30", value: "+06.50" },
-	{ label: "+07:00", value: "+07.00" },
-	{ label: "+08:00", value: "+08.00" },
-	{ label: "+08:45", value: "+08.75" },
-	{ label: "+09:00", value: "+09.00" },
-	{ label: "+09:30", value: "+09.50" },
-	{ label: "+10:00", value: "+10.00" },
-	{ label: "+10:30", value: "+10.50" },
-	{ label: "+11:00", value: "+11.00" },
-	{ label: "+12:00", value: "+12.00" },
-	{ label: "+12:45", value: "+12.75" },
-	{ label: "+13:00", value: "+13.00" },
-	{ label: "+14:00", value: "+14.00" },
-];
+const timezones = getTimeZones();
 
 const baseClockInitialValues = {
 	time: new Date(0, 0, 0, 0, 0),
@@ -80,21 +23,21 @@ const otherClockInitialValues = {
 	coOrdinate: "",
 };
 
-const ClockModal = ({ type, action, open, handleClose, handleSubmit: handleFormSubmit, data }) => {
+const ClockModal = ({ type, action, open, handleClose, handleSubmit: handleFormSubmit, data, baseClock }) => {
 	const theme = useTheme();
+	const [displayTime, setDisplayTime] = useState(null);
 
 	const defaultInitialValues = type === "Base" ? baseClockInitialValues : otherClockInitialValues;
-
 	const mergedInitialValues =
 		action === "Update"
 			? {
-					...defaultInitialValues,
-					...data,
-					...(type === "Base" && data.time ? { time: new Date(data.time) } : {}),
-			  }
+				...defaultInitialValues,
+				...data,
+				...(type === "Base" && data.timeDifference ? { time: addMilliseconds(Date.now(), data.timeDifference) } : {}),
+			}
 			: defaultInitialValues;
 
-	const { handleSubmit, getFieldProps, isSubmitting, resetForm, values, errors, handleChange } =
+	const { handleSubmit, getFieldProps, isSubmitting, resetForm, values, errors, handleChange, setFieldValue } =
 		useForm({
 			initialValues: mergedInitialValues,
 			validationSchema: type === "Base" ? baseClockFormSchema : otherClockFormSchema,
@@ -109,6 +52,21 @@ const ClockModal = ({ type, action, open, handleClose, handleSubmit: handleFormS
 	useEffect(() => {
 		resetForm();
 	}, [type, action, data, open, action]);
+
+
+	useEffect(() => {
+		if (type === "Other" && baseClock && values) {
+			const updateTime = () => {
+
+				const time = getOtherClockTime(baseClock, values);
+				if (time) setDisplayTime(format(time, "HH:mm:ss", { timeZone: values.timeZone }));
+			};
+
+			updateTime();
+			const interval = setInterval(updateTime, 1000);
+			return () => clearInterval(interval);
+		}
+	}, [type, baseClock, values]);
 
 	return (
 		<Dialog onClose={() => handleClose(isSubmitting)} open={open} maxWidth="lg" fullWidth>
@@ -142,8 +100,8 @@ const ClockModal = ({ type, action, open, handleClose, handleSubmit: handleFormS
 						alignItems: "center",
 						minHeight: "inherit",
 						gap: {
-							xs: theme.spacing(32),
 							sm: theme.spacing(4),
+							xs: theme.spacing(32),
 						},
 					}}
 				>
@@ -182,11 +140,10 @@ const ClockModal = ({ type, action, open, handleClose, handleSubmit: handleFormS
 									textAlign: "center",
 									fontFamily: theme.typography.h2,
 									color: "brand.gray.800",
-									border: `1px solid ${
-										errors.title
-											? theme.palette.brand.error[400]
-											: theme.palette.brand.gray[400]
-									}`,
+									border: `1px solid ${errors.title
+										? theme.palette.brand.error[400]
+										: theme.palette.brand.gray[400]
+										}`,
 									px: theme.spacing(16),
 									py: theme.spacing(12),
 									mx: "auto",
@@ -248,7 +205,7 @@ const ClockModal = ({ type, action, open, handleClose, handleSubmit: handleFormS
 								label="Time"
 							/>
 						) : (
-							<DisplayItem variant="Modal" label="Time" value="12 : 03 : 23" />
+							<DisplayItem variant="Modal" label="Time" value={displayTime} />
 						)}
 						<Select
 							name="timeZone"

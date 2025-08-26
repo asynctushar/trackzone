@@ -2,10 +2,11 @@ import { Box, Button, Typography, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import DisplayItem from "../ui/DisplayItem";
 import { useCallback } from "react";
-import { format } from "date-fns";
+import { addMilliseconds, format } from "date-fns";
 import { useNavigate } from "react-router";
+import { getOffsetLabel, getOtherClockTime, getTimeDifference } from "../../utils/clock";
 
-const ClockCard = ({ type, variant, onUpdate, data, onDelete }) => {
+const ClockCard = ({ type, variant, onUpdate, data, onDelete, baseClock }) => {
 	const theme = useTheme();
 	const navigate = useNavigate();
 
@@ -16,15 +17,46 @@ const ClockCard = ({ type, variant, onUpdate, data, onDelete }) => {
 	const [timeDifference, setTimeDifference] = useState(null);
 
 	useEffect(() => {
-		setTime(data?.time ? format(data.time, "HH:mm:ss") : null);
 		setTitle(data?.title ?? "");
 		setTimeZone(data?.timeZone ?? "");
 		setCoOrdinate(data?.coOrdinate ?? null);
 	}, [data]);
 
+
+	useEffect(() => {
+		if (data && type === "Base" && data.timeDifference !== undefined) {
+			const updateTime = () => {
+				const baseTime = addMilliseconds(Date.now(), data.timeDifference);
+				setTime(format(baseTime, "HH:mm:ss"));
+			};
+
+			updateTime();
+			const interval = setInterval(updateTime, 1000);
+
+			return () => clearInterval(interval);
+		}
+
+		if (data && type === "Other" && baseClock && baseClock.timeDifference !== undefined) {
+			const updateTime = () => {
+				const time = getOtherClockTime(baseClock, data);
+				if (time) setTime(format(time, "HH:mm:ss"));
+
+				const timeDiff = getTimeDifference(baseClock, data);
+				if (timeDiff) setTimeDifference(timeDiff);
+			};
+
+			updateTime();
+			const interval = setInterval(updateTime, 1000);
+
+			return () => clearInterval(interval);
+		}
+	}, [type, data, baseClock]);
+
+
 	const onEventsClick = useCallback(() => {
 		navigate(`/clocks/${data._id}/events`);
 	}, [data]);
+
 
 	return (
 		<Box
@@ -74,7 +106,7 @@ const ClockCard = ({ type, variant, onUpdate, data, onDelete }) => {
 				<DisplayItem variant={variant} label="Time" value={time} />
 				<DisplayItem variant={variant} label="Timezone" value={timeZone} />
 				{["GMT", "UTC"].includes(timeZone) && (
-					<DisplayItem variant={variant} label="Co-ordinate" value={coOrdinate} />
+					<DisplayItem variant={variant} label="Co-ordinate" value={getOffsetLabel(coOrdinate)} />
 				)}
 				{type === "Other" && (
 					<DisplayItem

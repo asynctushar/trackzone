@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import DisplayItem from "../../../components/ui/DisplayItem";
 import { format } from "date-fns";
 
-const EventCard = ({ event, onUpdate, onDelete }) => {
+const EventCard = ({ event, onUpdate, onDelete, baseClock }) => {
 	const theme = useTheme();
 
 	const [title, setTitle] = useState("");
