@@ -6,13 +6,13 @@ import DisplayItem from "../ui/DisplayItem";
 import { baseClockFormSchema, otherClockFormSchema } from "../../utils/validations";
 import useForm from "../../hooks/useForm";
 import { useEffect } from "react";
-import { addMilliseconds, format } from "date-fns";
-import { getOtherClockTime, offsets, getTimeZones } from "../../utils/clock";
+import { addMilliseconds, format, setHours, setMinutes, setSeconds } from "date-fns";
+import { getOtherClockTime, offsets, getTimeZones, getBaseDate } from "../../utils/clock";
 
 const timezones = getTimeZones();
 
 const baseClockInitialValues = {
-	time: new Date(0, 0, 0, 0, 0),
+	time: getBaseDate(),
 	timeZone: "",
 	coOrdinate: "",
 };
@@ -193,11 +193,20 @@ const ClockModal = ({ type, action, open, handleClose, handleSubmit: handleFormS
 							<InputTime
 								{...getFieldProps("time")}
 								onChange={(event) => {
-
 									if (event && !isNaN(event.getTime())) {
-										handleChange({ target: { name: "time", value: event } });
+										const baseDate = getBaseDate();
+
+										// merge the chosen time into the base date
+										const withDate = setSeconds(
+											setMinutes(
+												setHours(baseDate, event.getHours()),
+												event.getMinutes()
+											),
+											event.getSeconds()
+										);
+
+										handleChange({ target: { name: "time", value: withDate } });
 									} else {
-										// if you want to keep null in state
 										handleChange({ target: { name: "time", value: null } });
 									}
 								}}

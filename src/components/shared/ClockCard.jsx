@@ -4,7 +4,7 @@ import DisplayItem from "../ui/DisplayItem";
 import { useCallback } from "react";
 import { addMilliseconds, format } from "date-fns";
 import { useNavigate } from "react-router";
-import { getOffsetLabel, getOtherClockTime, getTimeDifference } from "../../utils/clock";
+import { formatTimeDifference, getOffsetLabel, getOtherClockTime, getTimeDifference } from "../../utils/clock";
 
 const ClockCard = ({ type, variant, onUpdate, data, onDelete, baseClock }) => {
 	const theme = useTheme();
@@ -42,7 +42,7 @@ const ClockCard = ({ type, variant, onUpdate, data, onDelete, baseClock }) => {
 				if (time) setTime(format(time, "HH:mm:ss"));
 
 				const timeDiff = getTimeDifference(baseClock, data);
-				if (timeDiff) setTimeDifference(timeDiff);
+				if (timeDiff) setTimeDifference(formatTimeDifference(timeDiff));
 			};
 
 			updateTime();

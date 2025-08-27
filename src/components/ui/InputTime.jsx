@@ -40,9 +40,8 @@ const StyledInputTime = styled(TimeField, {
 })(({ theme, hasError }) => ({
 	outline: "none",
 	color: theme.palette.brand.gray[800],
-	border: `1px solid ${
-		hasError ? theme.palette.brand.error[500] : theme.palette.brand.gray[400]
-	}`,
+	border: `1px solid ${hasError ? theme.palette.brand.error[500] : theme.palette.brand.gray[400]
+		}`,
 	height: theme.spacing(40),
 	paddingRight: theme.spacing(12),
 	paddingLeft: theme.spacing(12),

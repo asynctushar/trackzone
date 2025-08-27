@@ -1,4 +1,4 @@
-import { addMilliseconds, intervalToDuration } from "date-fns";
+import { addMilliseconds, intervalToDuration, startOfDay, addDays } from "date-fns";
 
 // constant values
 export const TimeZone_Offsets = {
@@ -156,10 +156,10 @@ export const getTimeDifference = (baseClock, otherClock) => {
     const offsetDifference = otherOffset - baseOffset;
     const timeMsDifference = offsetDifference * 3600 * 1000;
 
-    return formatTimeDifference(timeMsDifference);
+    return timeMsDifference;
 };
 
-export const formatTimeDifference = (ms) => {
+export const formatTimeDifference = (ms, showSign = true) => {
     if (ms == null) return null;
 
     const sign = ms < 0 ? "−" : "+";
@@ -173,5 +173,13 @@ export const formatTimeDifference = (ms) => {
     const mm = String(duration.minutes || 0).padStart(2, "0");
     const ss = String(duration.seconds || 0).padStart(2, "0");
 
-    return `${sign}${hh}:${mm}:${ss}`;
+    return showSign ? `${sign}${hh}:${mm}:${ss}` : `${hh}:${mm}:${ss}`;
+};
+
+export const getBaseDate = (jumpNextDay = false) => {
+    const todayMidnight = startOfDay(new Date());
+
+    if (!jumpNextDay) return todayMidnight;
+
+    return addDays(todayMidnight, 1);
 };

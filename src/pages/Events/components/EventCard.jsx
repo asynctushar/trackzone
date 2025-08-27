@@ -2,8 +2,9 @@ import { Box, Button, Typography, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import DisplayItem from "../../../components/ui/DisplayItem";
 import { format } from "date-fns";
+import { formatTimeDifference, getOtherClockTime, getTimeDifference } from "../../../utils/clock";
 
-const EventCard = ({ event, onUpdate, onDelete, baseClock }) => {
+const EventCard = ({ event, onUpdate, onDelete, baseClock, clock }) => {
 	const theme = useTheme();
 
 	const [title, setTitle] = useState("");
@@ -11,12 +12,37 @@ const EventCard = ({ event, onUpdate, onDelete, baseClock }) => {
 	const [description, setDescription] = useState("");
 	const [timeDifference, setTimeDifference] = useState(null);
 	const [timeLeft, setTimeLeft] = useState(null);
+	const [eventPast, setEventPast] = useState(false);
 
 	useEffect(() => {
 		setTime(event?.time ? format(event.time, "HH:mm:ss") : null);
 		setTitle(event?.title ?? "");
 		setDescription(event?.description);
 	}, [event]);
+
+
+	useEffect(() => {
+		if (event && event.time && baseClock && baseClock.timeDifference !== undefined && clock) {
+			const updateTime = () => {
+				const clockTime = getOtherClockTime(baseClock, clock);
+				if (clockTime) {
+					const timeLeft = new Date(event.time) - clockTime;
+
+					if (timeLeft <= 0) {
+						setEventPast(true);
+					} else {
+						setEventPast(false);
+						setTimeLeft(formatTimeDifference(timeLeft, false));
+					}
+				}
+			};
+
+			updateTime();
+			const interval = setInterval(updateTime, 1000);
+
+			return () => clearInterval(interval);
+		}
+	}, [event, clock, baseClock]);
 
 	return (
 		<Box
@@ -55,8 +81,7 @@ const EventCard = ({ event, onUpdate, onDelete, baseClock }) => {
 				}}
 			>
 				<DisplayItem variant="Small" label="Time" value={time} />
-				<DisplayItem variant="Small" label="Difference(Base)" value={timeDifference} />
-				<DisplayItem variant="Small" label="Time Left" value={timeLeft} />
+				<DisplayItem variant="Small" label="Time Left" value={eventPast ? "Passed" : timeLeft} />
 				<DisplayItem variant="Small" label="Description" type="desc" value={description} />
 			</Box>
 
@@ -72,7 +97,7 @@ const EventCard = ({ event, onUpdate, onDelete, baseClock }) => {
 				<Button color="brandError" variant="contained" onClick={() => onDelete(event._id)}>
 					Delete
 				</Button>
-				<Button color="brandPrimary" variant="contained" onClick={() => onUpdate(event)}>
+				<Button disabled={eventPast} color="brandPrimary" variant="contained" onClick={() => onUpdate(event)}>
 					Edit
 				</Button>
 			</Box>

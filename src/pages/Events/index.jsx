@@ -4,7 +4,7 @@ import { getLocalStorage, setLocalStorage } from "../../utils/localStorage";
 import ClockCard from "../../components/shared/ClockCard";
 import EventCard from "./components/EventCard";
 import CreateCard from "../../components/shared/CreateCard";
-import EventModal from "../../components/shared/EventModal";
+import EventModal from "./components/EventModal";
 import DeleteDialog from "../../components/shared/DeleteDialog";
 import { useNavigate, useParams } from "react-router";
 import NotFound from "../NotFound";
@@ -320,6 +320,7 @@ const Events = () => {
 										onDelete={handleDeleteEvent}
 										onUpdate={handleUpdateEvent}
 										baseClock={baseClock}
+										clock={clock}
 									/>
 								</Grid>
 							))}
@@ -351,6 +352,7 @@ const Events = () => {
 							handleSubmit={handleModalSubmit}
 							data={modalState.data}
 							clock={clock}
+							baseClock={baseClock}
 						/>
 					)}
 

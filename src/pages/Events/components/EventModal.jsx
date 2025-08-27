@@ -1,27 +1,29 @@
 import { Box, Button, Dialog, DialogContent, Typography, useTheme } from "@mui/material";
-import React, { useState } from "react";
-import InputTime from "../ui/InputTime";
-import TextArea from "../ui/TextArea";
-import { eventFormSchema } from "../../utils/validations";
-import useForm from "../../hooks/useForm";
+import InputTime from "../../../components/ui/InputTime";
+import TextArea from "../../../components/ui/TextArea";
+import { eventFormSchema } from "../../../utils/validations";
+import useForm from "../../../hooks/useForm";
 import { useEffect } from "react";
+import { setHours, setMinutes, setSeconds, isBefore } from "date-fns";
+import { getBaseDate, getOtherClockTime } from "../../../utils/clock";
+
 
 const initialValues = {
 	title: "",
-	time: new Date(0, 0, 0, 0, 0),
+	time: getBaseDate(true),
 	desciption: "",
 };
 
-const EventModal = ({ action, open, handleClose, handleSubmit: handleFormSubmit, data, clock }) => {
+const EventModal = ({ action, open, handleClose, handleSubmit: handleFormSubmit, data, clock, baseClock }) => {
 	const theme = useTheme();
 
 	const mergedInitialValues =
 		action === "Update"
 			? {
-					initialValues,
-					...data,
-					...(data.time ? { time: new Date(data.time) } : {}),
-			  }
+				initialValues,
+				...data,
+				...(data.time ? { time: new Date(data.time) } : {}),
+			}
 			: initialValues;
 
 	const { handleSubmit, getFieldProps, isSubmitting, resetForm, errors, handleChange } = useForm({
@@ -97,11 +99,10 @@ const EventModal = ({ action, open, handleClose, handleSubmit: handleFormSubmit,
 								textAlign: "center",
 								fontFamily: theme.typography.h2,
 								color: "brand.gray.800",
-								border: `1px solid ${
-									errors.title
-										? theme.palette.brand.error[400]
-										: theme.palette.brand.gray[400]
-								}`,
+								border: `1px solid ${errors.title
+									? theme.palette.brand.error[400]
+									: theme.palette.brand.gray[400]
+									}`,
 								px: theme.spacing(16),
 								py: theme.spacing(12),
 								mx: "auto",
@@ -150,9 +151,33 @@ const EventModal = ({ action, open, handleClose, handleSubmit: handleFormSubmit,
 							{...getFieldProps("time")}
 							onChange={(event) => {
 								if (event && !isNaN(event.getTime())) {
-									handleChange({ target: { name: "time", value: event } });
+									const otherClockTime = getOtherClockTime(baseClock, clock);
+									const today = getBaseDate();
+									const tomorrow = getBaseDate(true);
+
+									// merge event’s time into today
+									const candidate = setSeconds(
+										setMinutes(
+											setHours(today, event.getHours()),
+											event.getMinutes()
+										),
+										event.getSeconds()
+									);
+
+
+									// if candidate < otherClockTime, use tomorrow
+									const withDate = isBefore(candidate, otherClockTime)
+										? setSeconds(
+											setMinutes(
+												setHours(tomorrow, event.getHours()),
+												event.getMinutes()
+											),
+											event.getSeconds()
+										)
+										: candidate;
+
+									handleChange({ target: { name: "time", value: withDate } });
 								} else {
-									// if you want to keep null in state
 									handleChange({ target: { name: "time", value: null } });
 								}
 							}}

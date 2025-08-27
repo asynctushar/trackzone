@@ -1,4 +1,3 @@
-import React from "react";
 import Hero from "./components/Hero";
 import { Box } from "@mui/material";
 import Testimonials from "./components/Testimonials";
