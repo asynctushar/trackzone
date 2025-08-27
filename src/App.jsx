@@ -2,9 +2,13 @@ import { Box, Container } from "@mui/material";
 import { Outlet } from "react-router";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
+import { ErrorBoundary } from "react-error-boundary";
+import FallbackUI from "./components/layout/FallbackUI";
 
 const App = () => {
 	return (
+
+
 		<Box
 			sx={(theme) => ({
 				background: theme.palette.brand.neutral[200],
@@ -16,15 +20,25 @@ const App = () => {
 			})}
 		>
 			<Navbar />
-			<Container
-				sx={{
-					flexGrow: 1,
+			<ErrorBoundary
+				FallbackComponent={FallbackUI}
+				onError={(error, info) => {
+					// You can log to monitoring service here
+					console.error("Error caught by ErrorBoundary:", error, info);
 				}}
 			>
-				<Outlet />
-			</Container>
+
+				<Container
+					sx={{
+						flexGrow: 1,
+					}}
+				>
+					<Outlet />
+				</Container>
+			</ErrorBoundary >
 			<Footer />
 		</Box>
+
 	);
 };
 

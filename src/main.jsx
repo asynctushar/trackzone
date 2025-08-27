@@ -5,10 +5,13 @@ import { CssBaseline } from "@mui/material";
 import theme from "./theme";
 import router from "./router";
 import "./index.css";
+import { AlertProvider } from "./contexts/AlertContext";
 
 createRoot(document.getElementById("root")).render(
 	<ThemeProvider theme={theme}>
 		<CssBaseline />
-		<RouterProvider router={router} />
+		<AlertProvider >
+			<RouterProvider router={router} />
+		</AlertProvider>
 	</ThemeProvider>
 );

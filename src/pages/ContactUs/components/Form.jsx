@@ -1,12 +1,13 @@
 import { Box, useTheme, Button } from "@mui/material";
-import React from "react";
 import Input from "../../../components/ui/Input";
 import useForm from "../../../hooks/useForm";
 import TextArea from "../../../components/ui/TextArea";
 import { contactFormSchema } from "../../../utils/validations";
+import { useAlert } from "../../../contexts/AlertContext";
 
 const Form = () => {
 	const theme = useTheme();
+	const { showAlert } = useAlert();
 
 	const { handleSubmit, getFieldProps, isSubmitting, resetForm } = useForm({
 		initialValues: {
@@ -16,8 +17,32 @@ const Form = () => {
 		},
 		validationSchema: contactFormSchema,
 		onSubmit: async (formData) => {
-			console.log("Form submitted successfully:", formData);
-			resetForm();
+			try {
+				const res = await fetch("/api/public/message", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						...formData,
+						subject: "New Contact Message", // you can make this dynamic
+					}),
+				});
+
+				const data = await res.json();
+
+				if (!res.ok) {
+					// error response from API
+					showAlert(data.error || "Failed to send message", "error");
+				} else {
+					// success
+					showAlert(data.success || "Message sent successfully!", "success");
+					resetForm();
+				}
+			} catch (err) {
+				console.error("Contact form error:", err);
+				showAlert("Something went wrong. Please try again later.", "error");
+			}
 		},
 		validateOnChange: true,
 		validateOnBlur: true,
