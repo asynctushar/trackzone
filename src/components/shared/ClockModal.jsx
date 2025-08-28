@@ -37,20 +37,31 @@ const ClockModal = ({ type, action, open, handleClose, handleSubmit: handleFormS
 			}
 			: defaultInitialValues;
 
-	const { handleSubmit, getFieldProps, isSubmitting, resetForm, values, errors, handleChange, setFieldValue } =
-		useForm({
-			initialValues: mergedInitialValues,
-			validationSchema: type === "Base" ? baseClockFormSchema : otherClockFormSchema,
-			onSubmit: async (formData) => {
-				handleFormSubmit(formData);
-				resetForm();
-			},
-			validateOnChange: true,
-			validateOnBlur: true,
-		});
+	const {
+		handleSubmit,
+		getFieldProps,
+		isSubmitting,
+		resetForm,
+		values,
+		errors,
+		handleChange,
+		setFieldValue,
+	} = useForm({
+		initialValues: mergedInitialValues,
+		validationSchema:
+			type === "Base" ? baseClockFormSchema : otherClockFormSchema,
+		onSubmit: async (formData) => {
+			handleFormSubmit(formData);
+			resetForm();
+			setDisplayTime(null);
+		},
+		validateOnChange: true,
+		validateOnBlur: true,
+	});
 
 	useEffect(() => {
 		resetForm();
+		setDisplayTime(null);
 	}, [type, action, data, open, action]);
 
 
