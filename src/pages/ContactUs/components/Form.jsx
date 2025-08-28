@@ -18,14 +18,14 @@ const Form = () => {
 		validationSchema: contactFormSchema,
 		onSubmit: async (formData) => {
 			try {
-				const res = await fetch("/api/public/message", {
+				const res = await fetch("https://asynctushar.vercel.app/api/public/message", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
 					},
 					body: JSON.stringify({
 						...formData,
-						subject: "New Contact Message", // you can make this dynamic
+						subject: "New Contact Message on Trackzone Web App",
 					}),
 				});
 
