@@ -89,11 +89,11 @@ const Carousel = ({ items = [] }) => {
 						backgroundSize: "cover",
 						backgroundPosition: "center",
 						backgroundRepeat: "no-repeat",
-						backgroundColor: "rgba(0, 0, 0, 0.1)",
+						backgroundColor: "rgba(0, 0, 0, .5)",
 						backgroundBlendMode: "darken",
 					}}
 				>
-					<Typography variant="h2" sx={{ color: "brand.gray.800" }}>
+					<Typography variant="h2" sx={{ color: "brand.neutral.700" }}>
 						{item.name}
 					</Typography>
 				</Box>

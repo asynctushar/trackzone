@@ -50,17 +50,9 @@ const Inspirations = () => {
 				Inspiration
 			</Typography>
 			<Typography variant="bodyLarge" color="brand.gray.900">
-				TrackZone, in the context of a running or athletic environment, generally refers to
-				the designated area or lane where athletes compete or train, often on a track. It's
-				the space where races, sprints, and other track and field events take place.
-				Metaphorically, TrackZone can also represent a zone of focus and determination for
-				athletes, the space where they concentrate on their performance and push their
-				limits. <br /> <br />
-				In its most literal sense, TrackZone is the actual physical area of the track where
-				runners compete. It includes the lanes, the starting line, and the finish line, all
-				part of the designated running surface.
+				In athletics, the word TrackZone refers to the designated lanes where athletes train and compete—the starting line, the finish line, and everything in between. It is the physical ground where races unfold, where dedication meets discipline, and where every stride counts. <br /> <br />But TrackZone is also more than a location. Metaphorically, it represents the focused state of mind that athletes enter when striving for their best. It is the mental space where determination, concentration, and resilience align—reminding us that success is built both on the track and within ourselves.
 			</Typography>
-		</Box>
+		</Box >
 	);
 };
 

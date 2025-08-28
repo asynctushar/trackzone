@@ -1,15 +1,31 @@
 import React, { useCallback } from "react";
 import { Box, Button } from "@mui/material";
 import Carousel from "./Carousel";
-import Feature1 from "../../../assets/images/Feature1.png";
+import Feature1 from "../../../assets/images/Feature1.webp";
+import Feature2 from "../../../assets/images/Feature2.webp";
+import Feature3 from "../../../assets/images/Feature3.webp";
+import Feature4 from "../../../assets/images/Feature4.webp";
 import { useNavigate } from "react-router";
 
 const items = [
-	{ name: "Feature 1", cover: Feature1 },
-	{ name: "Feature 2", cover: Feature1 },
-	{ name: "Feature 3", cover: Feature1 },
-	{ name: "Feature 4", cover: Feature1 },
+	{
+		name: "Multiple Time Zone Clocks",
+		cover: Feature1,
+	},
+	{
+		name: "Event Scheduling",
+		cover: Feature2,
+	},
+	{
+		name: "Time Difference Calculator",
+		cover: Feature3
+	},
+	{
+		name: "Clean & Responsive Design",
+		cover: Feature4
+	},
 ];
+
 
 const Hero = () => {
 	const navigate = useNavigate();

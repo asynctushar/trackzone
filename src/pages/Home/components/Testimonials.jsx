@@ -1,29 +1,30 @@
 import { Box, Grid, Typography } from "@mui/material";
-import React from "react";
-import Avatar1 from "../../../assets/images/Avatar1.png";
+import Avatar1 from "../../../assets/images/Avatar1.webp";
+import Avatar2 from "../../../assets/images/Avatar2.webp";
+import Avatar3 from "../../../assets/images/Avatar3.webp";
 import UserCard from "./UserCard";
 
 const users = [
 	{
-		name: "Wallace Reid",
+		name: "Sophia Martinez",
 		avatar: Avatar1,
-		profession: "Programmer",
+		profession: "Project Manager",
 		comment:
-			"Really beautiful product. It helps me to enhance my productivity over different location",
+			"TrackZone makes coordinating across time zones effortless. I can plan meetings with my global team without confusion.",
 	},
 	{
-		name: "Wallace Reid",
-		avatar: Avatar1,
-		profession: "Programmer",
+		name: "Daniel Chen",
+		avatar: Avatar2,
+		profession: "Freelance Designer",
 		comment:
-			"Really beautiful product. It helps me to enhance my productivity over different location",
+			"I often work with clients overseas, and TrackZone keeps me on track. The clean interface makes it easy to manage my schedules.",
 	},
 	{
-		name: "Wallace Reid",
-		avatar: Avatar1,
-		profession: "Programmer",
+		name: "Emily Johnson",
+		avatar: Avatar3,
+		profession: "Entrepreneur",
 		comment:
-			"Really beautiful product. It helps me to enhance my productivity over different location",
+			"This app is a game-changer. I can manage events and track time differences quickly—perfect for my busy lifestyle.",
 	},
 ];
 

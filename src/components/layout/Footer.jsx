@@ -101,7 +101,7 @@ const Footer = () => {
 						<Typography
 							variant="h6"
 							component={Link}
-							to="#terms-conditions"
+							to="/terms&conditions"
 							sx={{
 								color: "brand.gray.900",
 								textDecoration: "none",
@@ -112,7 +112,7 @@ const Footer = () => {
 						<Typography
 							variant="h6"
 							component={Link}
-							to="#privacy-police"
+							to="/privacy-pollicy"
 							sx={{
 								color: "brand.gray.900",
 								textDecoration: "none",
@@ -145,7 +145,8 @@ const Footer = () => {
 					>
 						<MenuLink
 							component={Link}
-							to="#facebook"
+							to="https://www.facebook.com/asynctushar"
+							target="_blank"
 							sx={{ textDecoration: "none", color: "brand.gray.900" }}
 						>
 							<FacebookIcon
@@ -156,7 +157,8 @@ const Footer = () => {
 						<MenuLink
 							sx={{ textDecoration: "none", color: "brand.gray.900" }}
 							component={Link}
-							to="#linkedin"
+							to="https://www.linkedin.com/in/asynctushar/"
+							target="_blank"
 						>
 							<LinkedInIcon
 								sx={{ fontSize: (theme) => theme.spacing(32) }}
@@ -166,7 +168,8 @@ const Footer = () => {
 						<MenuLink
 							sx={{ textDecoration: "none", color: "brand.gray.900" }}
 							component={Link}
-							to="#x"
+							to="https://www.x.com/asynctushar"
+							target="_blank"
 						>
 							<XIcon
 								sx={{
