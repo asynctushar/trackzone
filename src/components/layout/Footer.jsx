@@ -202,7 +202,7 @@ const Footer = () => {
 						px: (theme) => theme.spacing(16),
 					}}
 				>
-					Trackzone ©2025 All right reserved
+					Trackzone ©2025 All right reserved.
 				</Typography>
 			</Box>
 		</Box>
