@@ -15,6 +15,7 @@ const NotFound = () => {
                 alignItems: "center",
                 justifyContent: "center",
                 textAlign: "center",
+                minHeight: "50vh",
                 gap: theme => theme.spacing(16),
             }}
         >

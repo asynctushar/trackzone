@@ -257,7 +257,9 @@ const Events = () => {
 			{isLoading ? (
 				<div>Loading...</div>
 			) : !clock ? (
-				<NotFound />
+				
+
+					<NotFound />
 			) : (
 				<Box
 					sx={(theme) => ({
