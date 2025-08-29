@@ -7,7 +7,7 @@ import CreateCard from "../../components/shared/CreateCard";
 import EventModal from "./components/EventModal";
 import DeleteDialog from "../../components/shared/DeleteDialog";
 import { useNavigate, useParams } from "react-router";
-import NotFound from "../NotFound";
+import NotFound from "../../components/shared/NotFound";
 import ClockModal from "../../components/shared/ClockModal";
 
 const Events = () => {

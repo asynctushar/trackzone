@@ -1,14 +1,9 @@
-
-import { Typography, Button, Container, Box } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import { useNavigate } from "react-router";
+import { Box } from "@mui/material";
 import Navbar from "../../components/layout/Navbar";
 import Footer from "../../components/layout/Footer";
+import NotFoundComponent from "../../components/shared/NotFound";
 
 const NotFound = () => {
-	const theme = useTheme();
-	const navigate = useNavigate();
-
 	return (
 
 		<Box
@@ -22,38 +17,7 @@ const NotFound = () => {
 			})}
 		>
 			<Navbar />
-			<Container
-				maxWidth="md"
-				sx={{
-					display: "flex",
-					flexDirection: "column",
-					alignItems: "center",
-					justifyContent: "center",
-					textAlign: "center",
-					gap: theme => theme.spacing(16),
-				}}
-			>
-
-				<Typography
-					variant="h2"
-					sx={{ fontWeight: "bold", color: theme.palette.brand.error[400], mb: 2 }}
-				>
-					404
-				</Typography>
-
-				<Typography
-					variant="h5"
-					sx={{ color: theme.palette.brand.error[400] }}
-				>
-					Oops! The page you're looking for doesn't exist.
-				</Typography>
-
-				<Button variant="contained" color="brandError"
-					onClick={() => navigate("/")}
-				>
-					Go Home
-				</Button>
-			</Container>
+			<NotFoundComponent />
 			<Footer />
 		</Box>
 
