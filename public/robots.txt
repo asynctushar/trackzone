@@ -1,0 +1,6 @@
+# Allow everything
+User-agent: *
+Allow: /
+
+# Sitemap (optional if you don’t generate one)
+Sitemap: https://trackzone-app.vercel.app/sitemap.xml
