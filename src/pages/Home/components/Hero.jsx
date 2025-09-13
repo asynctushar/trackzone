@@ -9,16 +9,16 @@ import { useNavigate } from "react-router";
 
 const items = [
 	{
-		name: "Multiple Time Zone Clocks",
-		cover: Feature1,
-	},
-	{
 		name: "Event Scheduling",
 		cover: Feature2,
 	},
 	{
 		name: "Time Difference Calculator",
 		cover: Feature3
+	},
+	{
+		name: "Multiple Time Zone Clocks",
+		cover: Feature1,
 	},
 	{
 		name: "Clean & Responsive Design",
