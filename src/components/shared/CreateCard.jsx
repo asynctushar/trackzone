@@ -19,13 +19,19 @@ const CreateCard = ({ type, onCreate }) => {
 				alignItems: "center",
 				justifyContent: "center",
 				gap: theme.spacing(48),
+				transition: "all",
+				transitionDuration: "100ms",
+
+
+				"&:hover": {
+					boxShadow: theme.brand.shadows.high,
+				},
 
 				[theme.breakpoints.up("sm")]: {
 					height: theme.spacing(450),
 					gap: theme.spacing(64),
 					py: theme.spacing(118),
 					px: theme.spacing(100),
-					boxShadow: theme.brand.shadows.high,
 				},
 
 				[theme.breakpoints.up("md")]: {

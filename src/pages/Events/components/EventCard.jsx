@@ -57,11 +57,17 @@ const EventCard = ({ event, onUpdate, onDelete, baseClock, clock }) => {
 				alignItems: "center",
 				justifyContent: "space-between",
 				gap: theme.spacing(24),
+				transition: "all",
+				transitionDuration: "100ms",
+
+
+				"&:hover": {
+					boxShadow: theme.brand.shadows.high,
+				},
 
 				[theme.breakpoints.up("sm")]: {
 					gap: theme.spacing(48),
 					px: theme.spacing(24),
-					boxShadow: theme.brand.shadows.high,
 				},
 			}}
 		>

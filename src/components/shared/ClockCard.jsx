@@ -71,6 +71,14 @@ const ClockCard = ({ type, variant, onUpdate, data, onDelete, baseClock }) => {
 				alignItems: "center",
 				justifyContent: "space-between",
 				gap: theme.spacing(24),
+				transition: "all",
+				transitionDuration: "100ms",
+
+
+				"&:hover": {
+					boxShadow: theme.brand.shadows.high,
+				},
+
 
 				[theme.breakpoints.up("sm")]: {
 					gap: theme.spacing(48),
@@ -79,13 +87,13 @@ const ClockCard = ({ type, variant, onUpdate, data, onDelete, baseClock }) => {
 						type === "Other" && variant === "Small"
 							? theme.spacing(24)
 							: theme.spacing(96),
-					boxShadow:
-						variant === "Large" ? theme.brand.shadows.medium : theme.brand.shadows.high,
 				},
 
 				[theme.breakpoints.up("md")]: {
 					height: theme.spacing(480),
 				},
+
+
 			}}
 		>
 			<Typography variant="h2" color="brand.gray.800">

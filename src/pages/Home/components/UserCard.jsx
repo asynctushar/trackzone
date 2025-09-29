@@ -6,11 +6,15 @@ import { styled, useTheme } from "@mui/material/styles";
 const StyledUserCard = styled(Card)(({ theme }) => ({
 	backgroundColor: theme.palette.brand.neutral[300],
 	borderRadius: theme.brand.radius.small,
-	boxShadow: theme.brand.shadows.high,
+	boxShadow: theme.brand.shadows.medium,
 	display: "flex",
 	flexDirection: "column",
 	height: theme.spacing(260),
-	width: "100%"
+	width: "100%",
+
+	"&:hover": {
+		boxShadow: theme.brand.shadows.high,
+	}
 }));
 
 const UserCard = ({ user }) => {
